@@ -1,13 +1,13 @@
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-12">
+    <footer className="bg-gray-900 dark:bg-black text-white py-12">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">K</span>
               </div>
               <span className="text-xl font-bold">KELA</span>
@@ -125,7 +125,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
           <p className="text-gray-400">
-            Copyright © 2035 by Lian Toper. All rights reserved.
+            Copyright © 2025 designed by Kela. All rights reserved.
           </p>
         </div>
       </div>

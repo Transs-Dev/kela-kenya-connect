@@ -1,7 +1,6 @@
-
 import { useState } from 'react';
-import { Menu, X, Phone, Mail } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Menu, X, Shield } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,53 +14,60 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100">
+    <header className="fixed top-0 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm z-50 border-b border-gray-100 dark:border-gray-800">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">K</span>
             </div>
-            <span className="text-xl font-bold text-gray-900">KELA</span>
+            <span className="text-xl font-bold text-gray-900 dark:text-white">KELA</span>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <button 
               onClick={() => scrollToSection('home')}
-              className="text-gray-700 hover:text-blue-600 transition-colors"
+              className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
             >
               Home
             </button>
             <button 
               onClick={() => scrollToSection('story')}
-              className="text-gray-700 hover:text-blue-600 transition-colors"
+              className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
             >
               Our Story
             </button>
             <button 
               onClick={() => scrollToSection('services')}
-              className="text-gray-700 hover:text-blue-600 transition-colors"
+              className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
             >
               Services
             </button>
             <button 
               onClick={() => scrollToSection('testimonials')}
-              className="text-gray-700 hover:text-blue-600 transition-colors"
+              className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
             >
               Client Stories
             </button>
             <button 
               onClick={() => scrollToSection('contact')}
-              className="text-gray-700 hover:text-blue-600 transition-colors"
+              className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
             >
               Contact
             </button>
+            <div className="flex items-center space-x-2">
+              <Shield className="w-4 h-4 text-emerald-600" />
+              <button className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                Admin
+              </button>
+            </div>
           </nav>
 
-          {/* Social Media Icons - Desktop */}
+          {/* Theme Toggle and Social Media Icons - Desktop */}
           <div className="hidden md:flex items-center space-x-4">
+            <ThemeToggle />
             <a 
               href="https://www.instagram.com/kenyanslivingabroad/profilecard/?igsh=cWQxazhlMDIwMmpm"
               target="_blank"
@@ -95,48 +101,57 @@ const Header = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden text-gray-700"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          <div className="md:hidden flex items-center space-x-2">
+            <ThemeToggle />
+            <button 
+              className="text-gray-700 dark:text-gray-300"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t border-gray-100 pt-4">
+          <div className="md:hidden mt-4 pb-4 border-t border-gray-100 dark:border-gray-800 pt-4">
             <nav className="flex flex-col space-y-4">
               <button 
                 onClick={() => scrollToSection('home')}
-                className="text-gray-700 hover:text-blue-600 transition-colors text-left"
+                className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-left"
               >
                 Home
               </button>
               <button 
                 onClick={() => scrollToSection('story')}
-                className="text-gray-700 hover:text-blue-600 transition-colors text-left"
+                className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-left"
               >
                 Our Story
               </button>
               <button 
                 onClick={() => scrollToSection('services')}
-                className="text-gray-700 hover:text-blue-600 transition-colors text-left"
+                className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-left"
               >
                 Services
               </button>
               <button 
                 onClick={() => scrollToSection('testimonials')}
-                className="text-gray-700 hover:text-blue-600 transition-colors text-left"
+                className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-left"
               >
                 Client Stories
               </button>
               <button 
                 onClick={() => scrollToSection('contact')}
-                className="text-gray-700 hover:text-blue-600 transition-colors text-left"
+                className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-left"
               >
                 Contact
               </button>
+              <div className="flex items-center space-x-2 pt-2">
+                <Shield className="w-4 h-4 text-emerald-600" />
+                <button className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                  Admin
+                </button>
+              </div>
               
               {/* Mobile Social Links */}
               <div className="flex items-center space-x-4 pt-4">
