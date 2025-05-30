@@ -1,25 +1,24 @@
-
 import { ExternalLink, Eye } from 'lucide-react';
 
 const Portfolio = () => {
   const portfolioItems = [
     {
+      image: "/portfolio3.jpeg",
+      title: "House Construction Initiated",
+      description: "The foundation phase of a residential property, marking the beginning of a new home.",
+      category: "Construction Phase"
+    },
+    {
       image: "/portfolio1.jpeg",
-      title: "Property Management Excellence",
-      description: "Successfully managing residential properties for diaspora clients, ensuring maintenance, tenant relations, and regular reporting.",
-      category: "Property Management"
+      title: "Fully Furnished Interior",
+      description: "Complete interior design and furnishing for a modern living space.",
+      category: "Interior Design"
     },
     {
       image: "/portfolio2.jpeg",
-      title: "Travel Coordination Mastery",
-      description: "Seamlessly coordinated complex travel arrangements including bookings, documentation, and local logistics for international clients.",
-      category: "Travel Services"
-    },
-    {
-      image: "/portfolio3.jpeg",
-      title: "Digital Solutions Implementation",
-      description: "Implemented comprehensive digital solutions for business operations, streamlining processes and improving efficiency.",
-      category: "Digital Services"
+      title: "Fully Completed Property",
+      description: "Turnkey delivery of a fully built, furnished, and functional residential property.",
+      category: "Project Completion"
     }
   ];
 
@@ -28,10 +27,10 @@ const Portfolio = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Our Portfolio
+            Recent Projects
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Explore our successful projects and see how we've helped clients achieve their goals
+            A glimpse into our work—from groundbreaking to handover.
           </p>
         </div>
 
