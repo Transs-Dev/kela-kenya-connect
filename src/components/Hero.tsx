@@ -74,8 +74,8 @@ const Hero = () => {
           <div className="relative animate-fade-in">
             <div className="relative z-10">
               <img 
-                src="https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                alt="Beautiful landscape representing connection across borders"
+                src="/portfolio2.jpeg"
+                alt="Kela Assistance Services - Professional support across borders"
                 className="rounded-2xl shadow-2xl w-full h-[400px] md:h-[500px] object-cover"
               />
             </div>

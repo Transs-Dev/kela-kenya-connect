@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Menu, X, Shield } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
@@ -19,9 +20,11 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">K</span>
-            </div>
+            <img 
+              src="/logo.jpeg" 
+              alt="Kela Logo" 
+              className="w-10 h-10 rounded-lg object-cover"
+            />
             <span className="text-xl font-bold text-gray-900 dark:text-white">KELA</span>
           </div>
 
@@ -44,6 +47,18 @@ const Header = () => {
               className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
             >
               Services
+            </button>
+            <button 
+              onClick={() => scrollToSection('process')}
+              className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+            >
+              Our Process
+            </button>
+            <button 
+              onClick={() => scrollToSection('portfolio')}
+              className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+            >
+              Portfolio
             </button>
             <button 
               onClick={() => scrollToSection('testimonials')}
@@ -133,6 +148,18 @@ const Header = () => {
                 className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-left"
               >
                 Services
+              </button>
+              <button 
+                onClick={() => scrollToSection('process')}
+                className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-left"
+              >
+                Our Process
+              </button>
+              <button 
+                onClick={() => scrollToSection('portfolio')}
+                className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-left"
+              >
+                Portfolio
               </button>
               <button 
                 onClick={() => scrollToSection('testimonials')}

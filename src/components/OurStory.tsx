@@ -73,8 +73,8 @@ const OurStory = () => {
           {/* Story Image */}
           <div className="relative">
             <img 
-              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-              alt="Team collaboration representing our story"
+              src="/about.jpeg"
+              alt="About Kela Assistance Services - Our team and story"
               className="rounded-2xl shadow-2xl w-full h-[600px] object-cover"
             />
             
