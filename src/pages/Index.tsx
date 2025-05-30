@@ -4,6 +4,7 @@ import Hero from '@/components/Hero';
 import OurStory from '@/components/OurStory';
 import EnhancedServices from '@/components/EnhancedServices';
 import Testimonials from '@/components/Testimonials';
+import FAQ from '@/components/FAQ';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import WhatsAppChatbot from '@/components/WhatsAppChatbot';
@@ -17,6 +18,7 @@ const Index = () => {
       <OurStory />
       <EnhancedServices />
       <Testimonials />
+      <FAQ />
       <Contact />
       <Footer />
       <WhatsAppChatbot />
