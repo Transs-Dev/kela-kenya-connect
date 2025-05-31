@@ -32,7 +32,7 @@ const Header = () => {
             />
             <div className="flex flex-col">
               <span className="text-xl font-bold text-gray-900 dark:text-white">KELA</span>
-              <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">Kenyans Living Abroad Virtual Assistance Services</span>
+              <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">Kenyans Living Abroad <br>Virtual Assistance Services</span>
             </div>
           </div>
 
