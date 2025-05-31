@@ -1,3 +1,4 @@
+
 import { ExternalLink, Eye } from 'lucide-react';
 
 const Portfolio = () => {
@@ -64,12 +65,12 @@ const Portfolio = () => {
               {/* Portfolio Content */}
               <div className="p-6">
                 <div className="mb-3">
-                  <span className="inline-block px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full">
+                  <span className="inline-block px-3 py-1 bg-pink-100 text-pink-800 text-xs font-semibold rounded-full">
                     {item.category}
                   </span>
                 </div>
                 
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-emerald-600 transition-colors">
+                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-pink-800 transition-colors">
                   {item.title}
                 </h3>
                 
@@ -79,7 +80,7 @@ const Portfolio = () => {
               </div>
 
               {/* Bottom border accent */}
-              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-blue-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-pink-800 to-pink-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
             </div>
           ))}
         </div>
@@ -96,7 +97,7 @@ const Portfolio = () => {
                 element.scrollIntoView({ behavior: 'smooth' });
               }
             }}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-300 transform hover:scale-105"
+            className="bg-pink-800 hover:bg-pink-900 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-300 transform hover:scale-105"
           >
             Start Your Project
           </button>

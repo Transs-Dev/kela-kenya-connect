@@ -23,19 +23,19 @@ const Hero = () => {
   };
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 to-blue-100 dark:from-gray-900 dark:to-gray-800 pt-20">
+    <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-pink-100 dark:from-gray-900 dark:to-gray-800 pt-20">
       <div className="container mx-auto px-4 py-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
           <div className="text-center lg:text-left animate-fade-in">
             <div className="mb-4">
-              <span className="text-lg md:text-xl text-emerald-600 dark:text-emerald-400 font-semibold">
+              <span className="text-lg md:text-xl text-pink-800 dark:text-pink-400 font-semibold">
               
               </span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
               Simplifying Life 
-              <span className="text-emerald-600 dark:text-emerald-400"> Across Borders</span>
+              <span className="text-pink-800 dark:text-pink-400"> Across Borders</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
               Kela empowers Kenyans abroad by simplifying property, travel, and digital needs. 
@@ -47,7 +47,7 @@ const Hero = () => {
               <Button 
                 onClick={scrollToServices}
                 size="lg"
-                className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:rotate-1 group"
+                className="bg-pink-800 hover:bg-pink-900 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:rotate-1 group"
               >
                 Explore Services
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -57,7 +57,7 @@ const Hero = () => {
                 onClick={openWhatsApp}
                 variant="outline"
                 size="lg"
-                className="border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:-rotate-1 group"
+                className="border-2 border-pink-800 text-pink-800 hover:bg-pink-800 hover:text-white px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:-rotate-1 group"
               >
                 <MessageCircle className="mr-2 w-5 h-5 group-hover:animate-pulse" />
                 Chat Now
@@ -67,7 +67,7 @@ const Hero = () => {
                 onClick={scrollToContact}
                 variant="ghost"
                 size="lg"
-                className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 group"
+                className="text-pink-800 hover:text-pink-900 hover:bg-pink-50 dark:hover:bg-pink-900/20 px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 group"
               >
                 <Phone className="mr-2 w-5 h-5 group-hover:animate-bounce" />
                 Call Us
@@ -85,8 +85,8 @@ const Hero = () => {
               />
             </div>
             {/* Decorative background elements */}
-            <div className="absolute -top-4 -right-4 w-20 h-20 bg-emerald-200 rounded-full opacity-50 animate-pulse"></div>
-            <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-blue-200 rounded-full opacity-50 animate-pulse delay-1000"></div>
+            <div className="absolute -top-4 -right-4 w-20 h-20 bg-pink-200 rounded-full opacity-50 animate-pulse"></div>
+            <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-pink-300 rounded-full opacity-50 animate-pulse delay-1000"></div>
           </div>
         </div>
       </div>
