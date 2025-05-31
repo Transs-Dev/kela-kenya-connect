@@ -14,7 +14,7 @@ const OurStory = () => {
       description: "Serving Kenyan diaspora worldwide with deep local knowledge and connections"
     },
     {
-      icon: <Users className="w-6 h-6 text-green-500" />,
+      icon: <Users className="w-6 h-6 text-emerald-500" />,
       title: "Trusted Network",
       description: "Built on relationships with reliable partners and verified professionals across Kenya"
     },
@@ -70,27 +70,27 @@ const OurStory = () => {
             </div>
           </div>
 
-          {/* Story Image - Resized for better visibility */}
+          {/* Story Image - Made fully visible */}
           <div className="relative">
             <img 
               src="/about.jpeg"
               alt="About Kela Assistance Services - Our team and story"
-              className="rounded-2xl shadow-2xl w-full h-[500px] md:h-[450px] lg:h-[500px] object-cover object-center"
+              className="rounded-2xl shadow-2xl w-full h-[600px] md:h-[550px] lg:h-[600px] object-cover object-top"
             />
             
             {/* Floating Stats */}
             <div className="absolute -bottom-6 -right-6 bg-white rounded-xl shadow-lg p-6 max-w-xs">
               <div className="grid grid-cols-2 gap-4 text-center">
                 <div>
-                  <div className="text-2xl font-bold text-blue-600">500+</div>
+                  <div className="text-2xl font-bold text-emerald-600">500+</div>
                   <div className="text-sm text-gray-600">Happy Clients</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-green-600">5+</div>
+                  <div className="text-2xl font-bold text-emerald-600">5+</div>
                   <div className="text-sm text-gray-600">Years Experience</div>
                 </div>
                 <div className="col-span-2">
-                  <div className="text-2xl font-bold text-purple-600">24/7</div>
+                  <div className="text-2xl font-bold text-emerald-600">24/7</div>
                   <div className="text-sm text-gray-600">Support Available</div>
                 </div>
               </div>
