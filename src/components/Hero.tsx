@@ -30,7 +30,7 @@ const Hero = () => {
           <div className="text-center lg:text-left animate-fade-in">
             <div className="mb-4">
               <span className="text-lg md:text-xl text-emerald-600 dark:text-emerald-400 font-semibold">
-                KELA means Kenyans Living Abroad
+              
               </span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
