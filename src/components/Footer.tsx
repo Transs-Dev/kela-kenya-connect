@@ -115,7 +115,7 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
             <div className="space-y-2 text-gray-400">
-              <p>+254 729 218569</p>
+              <p>+254 726 285869</p>
               <p>asumptam@yahoo.com</p>
               <p>Serving Kenyans Worldwide</p>
             </div>
