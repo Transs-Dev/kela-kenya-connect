@@ -74,12 +74,12 @@ const OurProcess = () => {
             </div>
           </div>
 
-          {/* Process Image */}
+          {/* Process Image - Resized for better visibility */}
           <div className="relative lg:sticky lg:top-8">
             <img 
               src="/process.jpeg"
               alt="Kela's streamlined process for virtual assistance"
-              className="rounded-2xl shadow-2xl w-full h-[700px] object-cover"
+              className="rounded-2xl shadow-2xl w-full h-[500px] md:h-[450px] lg:h-[500px] object-cover object-center"
             />
             
             {/* Floating process indicator */}

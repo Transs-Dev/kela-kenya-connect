@@ -1,10 +1,9 @@
-
 import { MessageCircle, X, Phone, Calendar, Home, Settings } from 'lucide-react';
 import { useState } from 'react';
 
 const WhatsAppChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const whatsappNumber = '+254729218569';
+  const whatsappNumber = '+254726285869';
 
   const quickLinks = [
     {

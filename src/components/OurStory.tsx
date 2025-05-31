@@ -70,12 +70,12 @@ const OurStory = () => {
             </div>
           </div>
 
-          {/* Story Image */}
+          {/* Story Image - Resized for better visibility */}
           <div className="relative">
             <img 
               src="/about.jpeg"
               alt="About Kela Assistance Services - Our team and story"
-              className="rounded-2xl shadow-2xl w-full h-[600px] object-cover"
+              className="rounded-2xl shadow-2xl w-full h-[500px] md:h-[450px] lg:h-[500px] object-cover object-center"
             />
             
             {/* Floating Stats */}

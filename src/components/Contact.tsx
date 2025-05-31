@@ -111,7 +111,7 @@ const Contact = () => {
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <Phone className="w-5 h-5 text-blue-600" />
-                  <span className="text-gray-700">+254 729 218569</span>
+                  <span className="text-gray-700">+254 726 285869</span>
                 </div>
                 
                 <div className="flex items-center space-x-3">
@@ -217,7 +217,7 @@ const Contact = () => {
               <p className="text-center text-gray-600 mb-4">Prefer to reach us directly?</p>
               <div className="flex justify-center space-x-6">
                 <a 
-                  href="tel:+254729218569"
+                  href="tel:+254726285869"
                   className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors"
                 >
                   <Phone className="w-4 h-4" />

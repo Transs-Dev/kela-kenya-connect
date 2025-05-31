@@ -1,10 +1,10 @@
 
-import { Home, Plane, ShoppingCart, Settings, MessageCircle } from 'lucide-react';
+import { Home, Plane, ShoppingCart, Settings, MessageCircle, HardHat } from 'lucide-react';
 import { useState } from 'react';
 
 const EnhancedServices = () => {
   const [expandedService, setExpandedService] = useState<number | null>(null);
-  const whatsappNumber = '+254729218569';
+  const whatsappNumber = '+254726285869';
 
   const services = [
     {
@@ -21,6 +21,21 @@ const EnhancedServices = () => {
         "Legal compliance and documentation"
       ],
       whatsappMessage: "Hi! I'm interested in your property management services. Can you provide more details?"
+    },
+    {
+      icon: HardHat,
+      title: "Construction Management",
+      description: "Comprehensive oversight of construction projects from planning to completion.",
+      color: "bg-yellow-100 text-yellow-600",
+      detailedDescription: "Professional construction management services for projects in Kenya",
+      keyPoints: [
+        "Project planning and timeline management",
+        "Quality control and site inspections",
+        "Contractor coordination and supervision",
+        "Budget management and cost control",
+        "Progress reporting with photos and updates"
+      ],
+      whatsappMessage: "Hi! I need help with construction management services. Can you assist me?"
     },
     {
       icon: Plane,
@@ -87,7 +102,7 @@ const EnhancedServices = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
           {services.map((service, index) => {
             const IconComponent = service.icon;
             const isExpanded = expandedService === index;
@@ -96,7 +111,7 @@ const EnhancedServices = () => {
               <div 
                 key={index}
                 className={`bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 group ${
-                  isExpanded ? 'md:col-span-2 lg:col-span-4' : ''
+                  isExpanded ? 'md:col-span-2 lg:col-span-3 xl:col-span-5' : ''
                 }`}
               >
                 <div className="p-8">

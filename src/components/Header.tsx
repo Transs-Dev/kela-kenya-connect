@@ -14,18 +14,26 @@ const Header = () => {
     }
   };
 
+  const navigateToAdmin = () => {
+    window.location.href = '/admin';
+    setIsMenuOpen(false);
+  };
+
   return (
     <header className="fixed top-0 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm z-50 border-b border-gray-100 dark:border-gray-800">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
             <img 
               src="/logo.jpeg" 
               alt="Kela Logo" 
-              className="w-10 h-10 rounded-lg object-cover"
+              className="w-12 h-12 rounded-lg object-cover"
             />
-            <span className="text-xl font-bold text-gray-900 dark:text-white">KELA</span>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold text-gray-900 dark:text-white">KELA</span>
+              <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">Assistance Services</span>
+            </div>
           </div>
 
           {/* Desktop Navigation */}
@@ -74,7 +82,10 @@ const Header = () => {
             </button>
             <div className="flex items-center space-x-2">
               <Shield className="w-4 h-4 text-emerald-600" />
-              <button className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+              <button 
+                onClick={navigateToAdmin}
+                className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+              >
                 Admin
               </button>
             </div>
@@ -175,7 +186,10 @@ const Header = () => {
               </button>
               <div className="flex items-center space-x-2 pt-2">
                 <Shield className="w-4 h-4 text-emerald-600" />
-                <button className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                <button 
+                  onClick={navigateToAdmin}
+                  className="text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                >
                   Admin
                 </button>
               </div>
