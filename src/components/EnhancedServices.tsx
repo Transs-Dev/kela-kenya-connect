@@ -11,7 +11,7 @@ const EnhancedServices = () => {
       icon: Home,
       title: "Property Management",
       description: "Rent collection, maintenance coordination, and tenant communication.",
-      color: "bg-emerald-100 text-emerald-600",
+      color: "bg-pink-100 text-pink-800",
       detailedDescription: "Complete property management solutions for Kenyans abroad",
       keyPoints: [
         "Monthly rent collection and remittance",
@@ -26,7 +26,7 @@ const EnhancedServices = () => {
       icon: HardHat,
       title: "Construction Management",
       description: "Comprehensive oversight of construction projects from planning to completion.",
-      color: "bg-yellow-100 text-yellow-600",
+      color: "bg-pink-200 text-pink-800",
       detailedDescription: "Professional construction management services for projects in Kenya",
       keyPoints: [
         "Project planning and timeline management",
@@ -41,7 +41,7 @@ const EnhancedServices = () => {
       icon: Plane,
       title: "Travel Planning",
       description: "Full itinerary support: flights, accommodation, and custom travel packages.",
-      color: "bg-blue-100 text-blue-600",
+      color: "bg-pink-100 text-pink-800",
       detailedDescription: "Seamless travel planning from abroad to Kenya",
       keyPoints: [
         "Flight booking and seat selection",
@@ -56,7 +56,7 @@ const EnhancedServices = () => {
       icon: ShoppingCart,
       title: "Daily Task Assistance",
       description: "Errands like groceries, appointment scheduling, and document handling.",
-      color: "bg-purple-100 text-purple-600",
+      color: "bg-pink-200 text-pink-800",
       detailedDescription: "Personal assistance for daily tasks and errands",
       keyPoints: [
         "Grocery shopping and delivery",
@@ -71,7 +71,7 @@ const EnhancedServices = () => {
       icon: Settings,
       title: "Tailored Solutions",
       description: "Personalized to meet the needs of each individual client.",
-      color: "bg-orange-100 text-orange-600",
+      color: "bg-pink-100 text-pink-800",
       detailedDescription: "Custom solutions designed specifically for your needs",
       keyPoints: [
         "Personalized service packages",
@@ -139,7 +139,7 @@ const EnhancedServices = () => {
                           <ul className="space-y-2">
                             {service.keyPoints.map((point, pointIndex) => (
                               <li key={pointIndex} className="flex items-start space-x-2">
-                                <div className="w-2 h-2 bg-emerald-500 rounded-full mt-2 flex-shrink-0"></div>
+                                <div className="w-2 h-2 bg-pink-800 rounded-full mt-2 flex-shrink-0"></div>
                                 <span className="text-gray-600 dark:text-gray-300 text-sm">{point}</span>
                               </li>
                             ))}
@@ -149,7 +149,7 @@ const EnhancedServices = () => {
                         <div className="flex flex-col justify-center">
                           <button
                             onClick={() => sendToWhatsApp(service.whatsappMessage)}
-                            className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2"
+                            className="bg-pink-800 hover:bg-pink-900 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2"
                           >
                             <MessageCircle className="w-5 h-5" />
                             <span>Chat on WhatsApp</span>
@@ -161,12 +161,12 @@ const EnhancedServices = () => {
                   
                   <button
                     onClick={() => setExpandedService(isExpanded ? null : index)}
-                    className="mt-4 text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
+                    className="mt-4 text-pink-800 hover:text-pink-900 font-medium transition-colors"
                   >
                     {isExpanded ? 'Show Less' : 'Learn More'}
                   </button>
                   
-                  <div className="mt-6 w-12 h-1 bg-gradient-to-r from-emerald-600 to-blue-600 rounded-full"></div>
+                  <div className="mt-6 w-12 h-1 bg-gradient-to-r from-pink-800 to-pink-400 rounded-full"></div>
                 </div>
               </div>
             );
@@ -179,7 +179,7 @@ const EnhancedServices = () => {
           </p>
           <button 
             onClick={() => sendToWhatsApp("Hi! I need a custom solution. Can we discuss my requirements?")}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 mx-auto"
+            className="bg-pink-800 hover:bg-pink-900 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 mx-auto"
           >
             <MessageCircle className="w-5 h-5" />
             <span>Discuss Your Needs</span>

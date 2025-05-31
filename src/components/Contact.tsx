@@ -110,19 +110,19 @@ const Contact = () => {
               
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
-                  <Phone className="w-5 h-5 text-emerald-600" />
+                  <Phone className="w-5 h-5 text-pink-800" />
                   <span className="text-gray-700">+254 726 285869</span>
                 </div>
                 
                 <div className="flex items-center space-x-3">
-                  <Mail className="w-5 h-5 text-emerald-600" />
-                  <a href="mailto:asumptam@yahoo.com" className="text-gray-700 hover:text-emerald-600 transition-colors">
+                  <Mail className="w-5 h-5 text-pink-800" />
+                  <a href="mailto:asumptam@yahoo.com" className="text-gray-700 hover:text-pink-800 transition-colors">
                     asumptam@yahoo.com
                   </a>
                 </div>
                 
                 <div className="flex items-center space-x-3">
-                  <MapPin className="w-5 h-5 text-emerald-600" />
+                  <MapPin className="w-5 h-5 text-pink-800" />
                   <span className="text-gray-700">Serving Kenyans Worldwide</span>
                 </div>
               </div>
@@ -145,7 +145,7 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     disabled={isSubmitting}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-800 focus:border-transparent transition-all duration-300"
                     placeholder="Enter your first name"
                   />
                 </div>
@@ -162,7 +162,7 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     disabled={isSubmitting}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-800 focus:border-transparent transition-all duration-300"
                     placeholder="Enter your last name"
                   />
                 </div>
@@ -180,7 +180,7 @@ const Contact = () => {
                   onChange={handleChange}
                   required
                   disabled={isSubmitting}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-800 focus:border-transparent transition-all duration-300"
                   placeholder="Enter your email address"
                 />
               </div>
@@ -196,7 +196,7 @@ const Contact = () => {
                   onChange={handleChange}
                   rows={5}
                   disabled={isSubmitting}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300 resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-800 focus:border-transparent transition-all duration-300 resize-none"
                   placeholder="Tell us about your needs..."
                 />
               </div>
@@ -205,7 +205,7 @@ const Contact = () => {
                 type="submit"
                 size="lg"
                 disabled={isSubmitting}
-                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2"
+                className="w-full bg-pink-800 hover:bg-pink-900 text-white py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2"
               >
                 <Send className="w-5 h-5" />
                 <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
@@ -218,14 +218,14 @@ const Contact = () => {
               <div className="flex justify-center space-x-6">
                 <a 
                   href="tel:+254726285869"
-                  className="flex items-center space-x-2 text-emerald-600 hover:text-emerald-700 transition-colors"
+                  className="flex items-center space-x-2 text-pink-800 hover:text-pink-900 transition-colors"
                 >
                   <Phone className="w-4 h-4" />
                   <span>Call Us</span>
                 </a>
                 <a 
                   href="mailto:asumptam@yahoo.com"
-                  className="flex items-center space-x-2 text-emerald-600 hover:text-emerald-700 transition-colors"
+                  className="flex items-center space-x-2 text-pink-800 hover:text-pink-900 transition-colors"
                 >
                   <Mail className="w-4 h-4" />
                   <span>Email Us</span>

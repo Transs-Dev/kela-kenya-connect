@@ -23,16 +23,13 @@ const Header = () => {
     <header className="fixed top-0 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm z-50 border-b border-gray-100 dark:border-gray-800">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo - Professional KELA branding */}
-          <div className="flex items-center space-x-3">
+          {/* Expanded Logo without KELA text */}
+          <div className="flex items-center">
             <img 
               src="/logo.jpeg" 
-              alt="Kela Logo" 
-              className="w-16 h-16 rounded-lg object-cover object-center"
+              alt="Company Logo" 
+              className="w-24 h-16 rounded-lg object-cover object-center"
             />
-            <div className="flex flex-col">
-              <span className="text-2xl font-bold text-gray-900 dark:text-white">KELA</span>
-            </div>
           </div>
 
           {/* Desktop Navigation */}

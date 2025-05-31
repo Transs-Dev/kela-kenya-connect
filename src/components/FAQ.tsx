@@ -74,9 +74,9 @@ const FAQ = () => {
               >
                 <span className="font-semibold text-gray-900">{item.question}</span>
                 {openItems.includes(index) ? (
-                  <ChevronUp className="w-5 h-5 text-blue-600" />
+                  <ChevronUp className="w-5 h-5 text-pink-800" />
                 ) : (
-                  <ChevronDown className="w-5 h-5 text-blue-600" />
+                  <ChevronDown className="w-5 h-5 text-pink-800" />
                 )}
               </button>
               
@@ -93,7 +93,7 @@ const FAQ = () => {
           <p className="text-gray-600 mb-4">Still have questions?</p>
           <a 
             href="#contact" 
-            className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center px-6 py-3 bg-pink-800 text-white font-semibold rounded-lg hover:bg-pink-900 transition-colors"
           >
             Contact Us
           </a>
