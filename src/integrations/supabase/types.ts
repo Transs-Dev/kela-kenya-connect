@@ -14,13 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contact_submissions: {
+        Row: {
+          email: string
+          first_name: string
+          id: string
+          last_name: string
+          message: string | null
+          status: string
+          submitted_at: string
+        }
+        Insert: {
+          email: string
+          first_name: string
+          id?: string
+          last_name: string
+          message?: string | null
+          status?: string
+          submitted_at?: string
+        }
+        Update: {
+          email?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          message?: string | null
+          status?: string
+          submitted_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_contact_submissions: {
+        Args: never
+        Returns: {
+          email: string
+          first_name: string
+          id: string
+          last_name: string
+          message: string | null
+          status: string
+          submitted_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "contact_submissions"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      update_submission_status: {
+        Args: { new_status: string; submission_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
