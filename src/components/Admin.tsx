@@ -1,36 +1,24 @@
-
-import { useState, useEffect } from 'react';
-import { Eye, EyeOff, FileText, Users, TrendingUp, Clock } from 'lucide-react';
+import { useState } from 'react';
+import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
+import { AdminSidebar } from './admin/AdminSidebar';
+import { AdminOverview } from './admin/AdminOverview';
+import { AdminClients } from './admin/AdminClients';
+import { AdminRequests } from './admin/AdminRequests';
+import { AdminMessages } from './admin/AdminMessages';
+import { AdminServices } from './admin/AdminServices';
+import { AdminPortfolio } from './admin/AdminPortfolio';
+import { AdminTestimonials } from './admin/AdminTestimonials';
+import { AdminProcess, AdminSettings } from './admin/AdminProcessSettings';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
-interface ContactSubmission {
-  id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  message: string;
-  submitted_at: string;
-  status: string;
-}
+import { Eye, EyeOff, Lock, LayoutDashboard, Menu } from 'lucide-react';
 
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pin, setPin] = useState('');
   const [showPin, setShowPin] = useState(false);
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [activeSection, setActiveSection] = useState('overview');
   const { toast } = useToast();
 
   const correctPin = '1200';
@@ -41,7 +29,7 @@ const Admin = () => {
       setIsAuthenticated(true);
       toast({
         title: "Access Granted",
-        description: "Welcome to the admin dashboard.",
+        description: "Welcome to the premium admin dashboard.",
       });
     } else {
       toast({
@@ -53,294 +41,131 @@ const Admin = () => {
     }
   };
 
-  const fetchSubmissions = async () => {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase.rpc('get_contact_submissions');
-      
-      if (error) {
-        console.error('Error fetching submissions:', error);
-        toast({
-          title: "Error",
-          description: "Failed to fetch contact submissions.",
-          variant: "destructive",
-        });
-      } else {
-        setSubmissions(data || []);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setPin('');
+    setActiveSection('overview');
+    toast({
+      title: "Logged Out",
+      description: "You have been securely logged out.",
+    });
   };
-
-  const updateSubmissionStatus = async (id: string, newStatus: string) => {
-    try {
-      const { error } = await supabase.rpc('update_submission_status', {
-        submission_id: id,
-        new_status: newStatus
-      });
-
-      if (error) {
-        console.error('Error updating status:', error);
-        toast({
-          title: "Error",
-          description: "Failed to update submission status.",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Status Updated",
-          description: `Submission marked as ${newStatus}.`,
-        });
-        fetchSubmissions(); // Refresh the list
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (isAuthenticated && activeTab === 'enquiries') {
-      fetchSubmissions();
-    }
-  }, [isAuthenticated, activeTab]);
 
   if (!isAuthenticated) {
     return (
-      <section className="py-20 bg-gray-50 min-h-screen flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Admin Access</h2>
-            <p className="text-gray-600">Please enter your PIN to continue</p>
+      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-10 animate-fade-in">
+            <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-primary/20">
+              <Lock className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Operations Portal</h1>
+            <p className="text-gray-500">Secure access for Kela Assistance administrators</p>
           </div>
 
-          <form onSubmit={handlePinSubmit} className="space-y-6">
-            <div className="relative">
-              <Input
-                type={showPin ? "text" : "password"}
-                value={pin}
-                onChange={(e) => setPin(e.target.value)}
-                placeholder="Enter PIN"
-                className="pr-12"
-                maxLength={4}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPin(!showPin)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                {showPin ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-            </div>
+          <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 p-8 border border-gray-100 animate-scale-in">
+            <form onSubmit={handlePinSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 ml-1">Enter Admin PIN</label>
+                <div className="relative">
+                  <Input
+                    type={showPin ? "text" : "password"}
+                    value={pin}
+                    onChange={(e) => setPin(e.target.value)}
+                    placeholder="••••"
+                    className="h-14 text-2xl tracking-[1em] text-center font-bold bg-gray-50 border-gray-100 focus:bg-white transition-all"
+                    maxLength={4}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPin(!showPin)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    {showPin ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+              </div>
 
-            <Button type="submit" className="w-full" disabled={pin.length !== 4}>
-              Access Dashboard
-            </Button>
-          </form>
+              <Button 
+                type="submit" 
+                className="w-full h-14 text-lg font-bold bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all active:scale-[0.98]" 
+                disabled={pin.length !== 4}
+              >
+                Unlock Dashboard
+              </Button>
+            </form>
+
+            <div className="mt-8 text-center">
+              <p className="text-xs text-gray-400">
+                Unauthorized access is strictly prohibited. <br />
+                All activity is logged and monitored.
+              </p>
+            </div>
+          </div>
         </div>
-      </section>
+      </div>
     );
   }
 
-  const newEnquiries = submissions.filter(sub => sub.status === 'new').length;
-  const totalEnquiries = submissions.length;
+  const renderSection = () => {
+    switch (activeSection) {
+      case 'overview': return <AdminOverview />;
+      case 'clients': return <AdminClients />;
+      case 'requests': return <AdminRequests />;
+      case 'messages': return <AdminMessages />;
+      case 'services': return <AdminServices />;
+      case 'portfolio': return <AdminPortfolio />;
+      case 'testimonials': return <AdminTestimonials />;
+      case 'process': return <AdminProcess />;
+      case 'settings': return <AdminSettings />;
+      default: return <AdminOverview />;
+    }
+  };
 
   return (
-    <section className="py-20 bg-gray-50 min-h-screen">
-      <div className="container mx-auto px-4">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
-          <p className="text-gray-600">Manage your business operations and customer enquiries</p>
-        </div>
-
-        {/* Navigation Tabs */}
-        <div className="bg-white rounded-lg shadow-sm mb-8">
-          <div className="border-b border-gray-200">
-            <nav className="flex space-x-8 px-6">
-              <button
-                onClick={() => setActiveTab('dashboard')}
-                className={`py-4 px-2 border-b-2 font-medium text-sm ${
-                  activeTab === 'dashboard'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <div className="flex items-center space-x-2">
-                  <TrendingUp className="w-4 h-4" />
-                  <span>Dashboard</span>
-                </div>
-              </button>
-              
-              <button
-                onClick={() => setActiveTab('enquiries')}
-                className={`py-4 px-2 border-b-2 font-medium text-sm ${
-                  activeTab === 'enquiries'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <div className="flex items-center space-x-2">
-                  <FileText className="w-4 h-4" />
-                  <span>New Enquiries</span>
-                  {newEnquiries > 0 && (
-                    <span className="bg-red-100 text-red-800 text-xs font-medium px-2 py-1 rounded-full">
-                      {newEnquiries}
-                    </span>
-                  )}
-                </div>
-              </button>
-            </nav>
-          </div>
-        </div>
-
-        {/* Dashboard Content */}
-        {activeTab === 'dashboard' && (
-          <div className="grid lg:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <FileText className="h-8 w-8 text-blue-600" />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Total Enquiries</p>
-                  <p className="text-2xl font-semibold text-gray-900">{totalEnquiries}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <Clock className="h-8 w-8 text-yellow-600" />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">New Enquiries</p>
-                  <p className="text-2xl font-semibold text-gray-900">{newEnquiries}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <Users className="h-8 w-8 text-green-600" />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Response Rate</p>
-                  <p className="text-2xl font-semibold text-gray-900">
-                    {totalEnquiries > 0 ? Math.round(((totalEnquiries - newEnquiries) / totalEnquiries) * 100) : 0}%
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* New Enquiries Tab */}
-        {activeTab === 'enquiries' && (
-          <div className="bg-white rounded-lg shadow-sm">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <div className="flex justify-between items-center">
-                <h2 className="text-lg font-semibold text-gray-900">Contact Submissions</h2>
-                <Button onClick={fetchSubmissions} disabled={loading}>
-                  {loading ? 'Loading...' : 'Refresh'}
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full bg-gray-50/50">
+        <AdminSidebar 
+          activeSection={activeSection} 
+          onSectionChange={setActiveSection} 
+          onLogout={handleLogout} 
+        />
+        <SidebarInset className="flex flex-col flex-1 overflow-hidden">
+          <header className="h-16 border-b bg-white flex items-center justify-between px-8 shrink-0 z-20 sticky top-0">
+            <div className="flex items-center gap-4">
+              <div className="md:hidden">
+                {/* Mobile Trigger would go here if using SidebarTrigger */}
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <Menu className="w-5 h-5" />
                 </Button>
               </div>
+              <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
+                <LayoutDashboard className="w-4 h-4" />
+                <span>Admin</span>
+                <span className="text-gray-300">/</span>
+                <span className="text-gray-900 capitalize">{activeSection}</span>
+              </div>
             </div>
 
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Message</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {submissions.map((submission) => (
-                    <TableRow key={submission.id}>
-                      <TableCell className="font-medium">
-                        {submission.first_name} {submission.last_name}
-                      </TableCell>
-                      <TableCell>{submission.email}</TableCell>
-                      <TableCell className="max-w-xs truncate">
-                        {submission.message || 'No message'}
-                      </TableCell>
-                      <TableCell>
-                        {new Date(submission.submitted_at).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          submission.status === 'new' 
-                            ? 'bg-blue-100 text-blue-800'
-                            : submission.status === 'read'
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-green-100 text-green-800'
-                        }`}>
-                          {submission.status}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex space-x-2">
-                          {submission.status === 'new' && (
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              onClick={() => updateSubmissionStatus(submission.id, 'read')}
-                            >
-                              Mark Read
-                            </Button>
-                          )}
-                          {submission.status !== 'responded' && (
-                            <Button 
-                              size="sm" 
-                              onClick={() => updateSubmissionStatus(submission.id, 'responded')}
-                            >
-                              Mark Responded
-                            </Button>
-                          )}
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-
-              {submissions.length === 0 && !loading && (
-                <div className="text-center py-8 text-gray-500">
-                  No submissions found.
-                </div>
-              )}
+            <div className="flex items-center gap-4">
+              <div className="hidden sm:flex flex-col items-end">
+                <span className="text-sm font-bold text-gray-900">Operations Manager</span>
+                <span className="text-[10px] text-primary font-bold uppercase tracking-wider">Super Admin</span>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-gray-600">
+                AD
+              </div>
             </div>
-          </div>
-        )}
+          </header>
 
-        {/* Logout Button */}
-        <div className="mt-8 text-center">
-          <Button 
-            variant="outline" 
-            onClick={() => {
-              setIsAuthenticated(false);
-              setPin('');
-              setActiveTab('dashboard');
-            }}
-          >
-            Logout
-          </Button>
-        </div>
+          <main className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+            <div className="max-w-7xl mx-auto pb-12">
+              {renderSection()}
+            </div>
+          </main>
+        </SidebarInset>
       </div>
-    </section>
+    </SidebarProvider>
   );
 };
 
