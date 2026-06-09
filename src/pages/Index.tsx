@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, MessageCircle, Phone, ShieldCheck, Globe2, HeartHandshake, Sparkles, Star, Users, Briefcase, MapPin } from 'lucide-react';
+import { ArrowRight, MessageCircle, Phone, ShieldCheck, Globe2, HeartHandshake, Sparkles, Star, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SEO from '@/components/SEO';
 import ServiceCard from '@/components/ServiceCard';
