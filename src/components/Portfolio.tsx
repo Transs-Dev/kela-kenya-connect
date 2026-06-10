@@ -1,106 +1,38 @@
+import { ExternalLink } from 'lucide-react';
+import { usePortfolio } from '@/hooks/useAdminData';
 
-import { ExternalLink, Eye } from 'lucide-react';
+const FALLBACK = [
+  { image_url: '/portfolio3.jpeg', title: 'House Construction Initiated', description: 'Foundation phase of a residential property.', category: 'Construction' },
+  { image_url: '/portfolio1.jpeg', title: 'Fully Furnished Interior', description: 'Modern interior design and furnishing.', category: 'Interior' },
+  { image_url: '/portfolio2.jpeg', title: 'Fully Completed Property', description: 'Turnkey delivery of a residential build.', category: 'Completion' },
+];
 
 const Portfolio = () => {
-  const portfolioItems = [
-    {
-      image: "/portfolio3.jpeg",
-      title: "House Construction Initiated",
-      description: "The foundation phase of a residential property, marking the beginning of a new home.",
-      category: "Construction Phase"
-    },
-    {
-      image: "/portfolio1.jpeg",
-      title: "Fully Furnished Interior",
-      description: "Complete interior design and furnishing for a modern living space.",
-      category: "Interior Design"
-    },
-    {
-      image: "/portfolio2.jpeg",
-      title: "Fully Completed Property",
-      description: "Turnkey delivery of a fully built, furnished, and functional residential property.",
-      category: "Project Completion"
-    }
-  ];
+  const { data: items = [] } = usePortfolio();
+  const list = items.length > 0 ? items : FALLBACK;
 
   return (
-    <section id="portfolio" className="py-20 bg-white">
+    <section id="portfolio" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Recent Projects
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            A glimpse into our work—from groundbreaking to handover.
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Recent Projects</h2>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">A glimpse into our work—from groundbreaking to handover.</p>
         </div>
-
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {portfolioItems.map((item, index) => (
-            <div 
-              key={index}
-              className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white"
-            >
-              {/* Portfolio Image */}
-              <div className="relative overflow-hidden">
-                <img 
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                
-                {/* Overlay on hover */}
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <div className="flex space-x-4">
-                    <button className="p-3 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors">
-                      <Eye className="w-5 h-5 text-white" />
-                    </button>
-                    <button className="p-3 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors">
-                      <ExternalLink className="w-5 h-5 text-white" />
-                    </button>
-                  </div>
+          {list.map((item: any, i: number) => (
+            <div key={item.id ?? i} className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-card">
+              {item.image_url && (
+                <div className="relative overflow-hidden">
+                  <img src={item.image_url} alt={item.title} className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" />
                 </div>
-              </div>
-
-              {/* Portfolio Content */}
+              )}
               <div className="p-6">
-                <div className="mb-3">
-                  <span className="inline-block px-3 py-1 bg-pink-100 text-pink-800 text-xs font-semibold rounded-full">
-                    {item.category}
-                  </span>
-                </div>
-                
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-pink-800 transition-colors">
-                  {item.title}
-                </h3>
-                
-                <p className="text-gray-600 leading-relaxed">
-                  {item.description}
-                </p>
+                {item.category && <span className="text-xs uppercase tracking-wider text-primary font-bold">{item.category}</span>}
+                <h3 className="text-xl font-bold mt-2 mb-2">{item.title}</h3>
+                <p className="text-muted-foreground text-sm">{item.description}</p>
               </div>
-
-              {/* Bottom border accent */}
-              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-pink-800 to-pink-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
             </div>
           ))}
-        </div>
-
-        {/* Call to action */}
-        <div className="text-center mt-16">
-          <p className="text-lg text-gray-600 mb-6">
-            Ready to be our next success story?
-          </p>
-          <button 
-            onClick={() => {
-              const element = document.getElementById('contact');
-              if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-            className="bg-pink-800 hover:bg-pink-900 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-300 transform hover:scale-105"
-          >
-            Start Your Project
-          </button>
         </div>
       </div>
     </section>
