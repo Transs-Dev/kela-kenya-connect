@@ -1,82 +1,64 @@
+# Dynamic Admin Panel — Implementation Plan
 
-# Kela Assistance — Multi-Page Redesign Plan
+A full cloud-backed redesign of the admin system. No mock data anywhere. All reads/writes go through Lovable Cloud (Supabase) with realtime subscriptions where it matters.
 
-Convert the current single-page site into a polished, multi-page React Router app with refreshed UX, while preserving the existing dark pink (#800024) / soft pink (#C17A8E) brand theme.
+## 1. Backend (single migration)
 
-## 1. Routing & Structure
+New tables in `public` (all with RLS + GRANTs):
 
-Refactor `src/App.tsx` to use a shared `MainLayout` (Header + Footer + WhatsApp button) wrapping all public routes:
+- `clients` — name, email, phone, country, notes
+- `service_requests` — client_id, service, status (pending/in_progress/completed/on_hold), assigned_to, internal_notes
+- `messages` — sender_name, email, subject, body, status (unread/read/archived)
+- `services_mgmt` — title, slug, description, icon, is_published, sort_order
+- `portfolio_items` — title, description, image_url, category, sort_order
+- `testimonials` — client_name, location, service, content, rating, is_approved
+- `process_stages` — title, description, step_number, is_active
+- `site_settings` — single-row key/value JSONB (contact info, branding, homepage copy)
+- `homepage_slides` — image_url, caption, sort_order, is_active
 
-```
-/                      Home
-/about                 Our Story
-/services              Services overview
-/services/property-management
-/services/construction-management
-/services/travel-planning
-/services/daily-tasks
-/services/tailored-solutions
-/process               Our Process
-/portfolio             Portfolio / Projects
-/testimonials          Client Stories
-/faq                   FAQ
-/contact               Contact
-/admin                 Admin (existing)
-*                      NotFound
-```
+Keep existing `contact_submissions` — surface it inside Messages.
 
-- Update `Header.tsx` nav to use `react-router-dom` `NavLink`s instead of scroll-to-section anchors. Sticky, with active-state styling in brand pink.
-- Footer quick links also become real routes.
+**Storage buckets** (public, created via tool):
+- `homepage-slides` — background slideshow images
+- `portfolio` — portfolio project images
+- `site-assets` — logos / branding
 
-## 2. Reusable Layout & UI Primitives
+**RLS strategy** (admin uses PIN-based client gate — no auth users yet):
+- Public SELECT on published content (`services_mgmt` where published, active `homepage_slides`, approved `testimonials`, `portfolio_items`, active `process_stages`, `site_settings`)
+- All writes + admin reads via SECURITY DEFINER RPCs (`admin_*`) since there's no Supabase auth
+- Public INSERT on `messages` (anyone can contact)
+- Realtime enabled on `messages`, `service_requests`, `contact_submissions`
 
-New files:
-- `src/components/layout/MainLayout.tsx` — Header + `<Outlet />` + Footer + WhatsAppChatbot
-- `src/components/layout/PageHero.tsx` — reusable page header (title, subtitle, breadcrumb, pink gradient band)
-- `src/components/CTASection.tsx` — repeated "Talk to us" band with WhatsApp + Call buttons (used on every page)
-- `src/components/ServiceCard.tsx` — used on Home preview + Services overview
+## 2. Admin UI (rebuilt, no mock data)
 
-## 3. Home Page Redesign (`src/pages/Index.tsx`)
+All sections use TanStack Query + Supabase realtime channels:
 
-Sections, in order:
-1. Hero — headline "Simplifying Life Across Borders for Kenyans Abroad", supporting line, three CTAs (Explore Services → /services, Chat on WhatsApp, Call Us). Cleaner two-column layout, more whitespace, subtle gradient.
-2. Trust stats strip — "10+ yrs experience", "500+ clients served", "15+ countries", "24/7 support".
-3. Services preview — 5 clickable cards linking to each service page.
-4. Why Choose Us — 4 value props (Trust, Transparency, Local Expertise, Diaspora-First).
-5. Simplified Process preview — 3 condensed steps + link to /process.
-6. Testimonials preview — 3 cards + link to /testimonials.
-7. Final CTA band.
+- **WelcomeBanner** — auto-shows on admin login, dismisses after 20s
+- **AdminOverview** — live counts (clients, active requests, completed, new inquiries) + recent activity feed from `service_requests` + `messages`
+- **Homepage Slides Manager** — file upload from computer → storage bucket → `homepage_slides` row; reorder, toggle active, delete
+- **Service Requests** — list/filter, edit status, assign, add internal notes (live)
+- **Messages / Inbox** — unified view of `messages` + `contact_submissions`, realtime, mark read/archive, reply via mailto
+- **Services** — create/edit/publish/unpublish, sort
+- **Portfolio** — image upload, CRUD, reorder
+- **Testimonials** — CRUD + approve toggle
+- **Process Stages** — CRUD, reorder, toggle active
+- **Settings** — edit `site_settings` JSON (contact phone/email, brand colors, hero copy, social links)
 
-## 4. Other Pages
+## 3. Public site wiring
 
-- **About** (`pages/About.tsx`): narrative origin story, Mission, Vision, Values grid (Trust / Reliability / Transparency / Care), team/founder note, CTA.
-- **Services overview** (`pages/Services.tsx`): intro + grid of 5 ServiceCards linking to detail pages.
-- **Service detail pages** (`pages/services/PropertyManagement.tsx`, `ConstructionManagement.tsx`, `TravelPlanning.tsx`, `DailyTasks.tsx`, `TailoredSolutions.tsx`): each with hero, "What it is", "Benefits" list, "How it works" steps, CTA. Driven by a shared `ServiceDetail` component fed by per-page data to keep code small.
-- **Process** (`pages/Process.tsx`): wraps existing `OurProcess` content, restyled as a vertical timeline with numbered pink badges.
-- **Portfolio** (`pages/PortfolioPage.tsx`): existing Portfolio component, with PageHero.
-- **Testimonials** (`pages/TestimonialsPage.tsx`): restructured cards showing name, location, service used, outcome, rating.
-- **FAQ** (`pages/FAQPage.tsx`): existing FAQ in new layout.
-- **Contact** (`pages/ContactPage.tsx`): existing Contact form + info, with prominent phone/WhatsApp.
+Replace hardcoded data in `Hero` (slides), `Services`/`EnhancedServices`, `Portfolio`, `Testimonials`, `OurProcess`, `Contact`, `Footer` with live queries from the new tables. Falls back gracefully when empty.
 
-## 5. Visual / UX Polish
+## 4. Out of scope
 
-- Keep `--primary` pink tokens as-is in `index.css`.
-- Tighten typography scale, increase section padding (`py-24`), use container max-w-6xl.
-- Sticky header with shadow on scroll (already partially in place — verify).
-- Active NavLink underline in pink.
-- Mobile menu remains; update to route-based.
-- SEO: per-page `<title>` + meta description via small `SEO` helper component using `document.title` effect, plus single H1 per page.
+- Real Supabase auth for admin (keep existing PIN gate; admin RPCs are intentionally callable — noted as a follow-up to harden with real auth + roles)
+- Email sending (reply uses mailto)
+- Drag-and-drop reordering polish (use number input for sort_order)
 
-## 6. Out of Scope
+## 5. Files
 
-- No backend/schema changes.
-- Admin page logic unchanged (still /admin).
-- No new images — reuse existing files in `/public`.
-- Color tokens unchanged.
+**Migration:** `supabase/migrations/<timestamp>_admin_dynamic.sql`
+**New:** `src/components/admin/WelcomeBanner.tsx`, `AdminHomepageSlides.tsx`, `AdminSettings.tsx`; `src/hooks/useAdminData.ts` (rewritten to use supabase); `src/lib/adminApi.ts`
+**Rewritten (remove mock data):** `AdminOverview.tsx`, `AdminClients.tsx`, `AdminRequests.tsx`, `AdminMessages.tsx`, `AdminServices.tsx`, `AdminPortfolio.tsx`, `AdminTestimonials.tsx`, `AdminProcessSettings.tsx`, `AdminSidebar.tsx`, `Admin.tsx`
+**Updated public components:** `Hero.tsx`, `Services.tsx`/`EnhancedServices.tsx`, `Portfolio.tsx`, `Testimonials.tsx`, `OurProcess.tsx`, `Contact.tsx`, `Footer.tsx`
 
-## Technical Notes
-
-- All nav uses `<NavLink>` / `useNavigate`; remove `scrollIntoView` from Header.
-- CTA buttons reuse the same `openWhatsApp` and `tel:` helpers; centralize in `src/lib/contact.ts`.
-- Existing components (`OurStory`, `EnhancedServices`, `OurProcess`, `Portfolio`, `Testimonials`, `FAQ`, `Contact`) get wrapped/lightly refactored rather than rewritten where possible.
-- Index page is rebuilt to use new preview sections instead of full sections.
+Confirm to proceed and I'll ship migration + storage buckets + all admin/public rewiring in parallel.

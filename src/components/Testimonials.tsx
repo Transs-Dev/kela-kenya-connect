@@ -1,91 +1,44 @@
-
 import { Star } from 'lucide-react';
+import { useTestimonials } from '@/hooks/useAdminData';
 
 const Testimonials = () => {
-  const testimonials = [
-    {
-      name: "Grace M.",
-      date: "04/15/2023",
-      text: "Kela Assistance Services made managing my property overseas so much easier. Their attention to detail and prompt communication were truly impressive.",
-      rating: 5
-    },
-    {
-      name: "Daniel K.",
-      date: "07/22/2023", 
-      text: "I relied on Kela to arrange my vacation, and I couldn't have been happier with the seamless experience they provided. Highly recommended!",
-      rating: 5
-    },
-    {
-      name: "Sarah N.",
-      date: "10/30/2023",
-      text: "Kela's assistance with my daily errands was a game-changer. It allowed me to focus on my work without worrying about the small details. Thank you!",
-      rating: 5
-    }
-  ];
+  const { data: all = [] } = useTestimonials();
+  const items = all.filter((t: any) => t.is_approved);
+
+  if (items.length === 0) {
+    return (
+      <section id="testimonials" className="py-20 bg-background">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Client Stories</h2>
+          <p className="text-muted-foreground">Testimonials coming soon.</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section id="testimonials" className="py-20 bg-white">
+    <section id="testimonials" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Client Stories
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Hear from our satisfied clients who trust us with their important needs
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Client Stories</h2>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Hear from our satisfied clients who trust us with their important needs.</p>
         </div>
-
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {testimonials.map((testimonial, index) => (
-            <div 
-              key={index}
-              className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden group"
-            >
-              {/* Decorative quote mark */}
-              <div className="absolute top-4 right-4 text-6xl text-blue-200 opacity-50 group-hover:opacity-70 transition-opacity duration-300">
-                "
-              </div>
-              
-              {/* Rating stars */}
+          {items.map((t: any) => (
+            <div key={t.id} className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+              <div className="absolute top-4 right-4 text-6xl text-primary/20">"</div>
               <div className="flex items-center mb-4">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                {Array.from({ length: t.rating || 5 }).map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-primary text-primary" />
                 ))}
               </div>
-              
-              {/* Testimonial text */}
-              <blockquote className="text-gray-700 leading-relaxed mb-6 italic relative z-10">
-                "{testimonial.text}"
-              </blockquote>
-              
-              {/* Client info */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="font-bold text-gray-900">{testimonial.name}</div>
-                  <div className="text-sm text-gray-500">{testimonial.date}</div>
-                </div>
-                
-                {/* Client avatar placeholder */}
-                <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
-                  <span className="text-white font-semibold">
-                    {testimonial.name.charAt(0)}
-                  </span>
-                </div>
+              <p className="text-foreground mb-6 relative z-10">{t.content}</p>
+              <div className="border-t pt-4">
+                <p className="font-bold">{t.client_name}</p>
+                {(t.location || t.service) && <p className="text-xs text-muted-foreground">{[t.location, t.service].filter(Boolean).join(' · ')}</p>}
               </div>
-              
-              {/* Hover effect background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-indigo-100 opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
             </div>
           ))}
-        </div>
-        
-        {/* Additional trust indicators */}
-        <div className="mt-16 text-center">
-          <p className="text-gray-600 mb-8">Join hundreds of satisfied clients worldwide</p>
-          <div className="flex justify-center items-center space-x-8 opacity-60">
-            <div className="text-sm font-semibold text-gray-500">TRUSTED BY KENYANS IN</div>
-            <div className="text-sm font-semibold text-gray-500">USA • UK • CANADA • AUSTRALIA</div>
-          </div>
         </div>
       </div>
     </section>

@@ -1,83 +1,87 @@
-import { useState } from 'react';
-import { Plus, Edit2, Trash2, Power, Briefcase, Eye, EyeOff } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import { Badge } from '@/components/ui/badge';
+import { useState } from "react";
+import { Plus, Trash2, Edit2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useServicesMgmt } from "@/hooks/useAdminData";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
+import { useQueryClient } from "@tanstack/react-query";
+
+const empty = { id: "", title: "", slug: "", description: "", icon: "Sparkles", sort_order: 0, is_published: true };
 
 export function AdminServices() {
-  const [services, setServices] = useState([
-    { id: 1, name: 'Property Management', category: 'Real Estate', status: 'Enabled', inquiries: 24, description: 'Rent collection, maintenance and tenant care while you live abroad.' },
-    { id: 2, name: 'Construction Management', category: 'Construction', status: 'Enabled', inquiries: 15, description: 'End-to-end oversight of your build, from foundation to handover.' },
-    { id: 3, name: 'Travel Planning', category: 'Lifestyle', status: 'Enabled', inquiries: 12, description: 'Flights, stays and itineraries — planned to feel effortless.' },
-    { id: 4, name: 'Daily Task Assistance', category: 'General', status: 'Disabled', inquiries: 42, description: 'Errands, appointments and documents — handled for you in Kenya.' },
-  ]);
+  const { data: services = [] } = useServicesMgmt();
+  const qc = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState<any>(empty);
+
+  const save = async () => {
+    if (!form.title || !form.slug) return toast({ title: "Title & slug required", variant: "destructive" });
+    const payload = { title: form.title, slug: form.slug, description: form.description, icon: form.icon, sort_order: Number(form.sort_order) || 0, is_published: form.is_published };
+    const { error } = form.id
+      ? await supabase.from("services_mgmt").update(payload).eq("id", form.id)
+      : await supabase.from("services_mgmt").insert(payload);
+    if (error) return toast({ title: "Failed", description: error.message, variant: "destructive" });
+    qc.invalidateQueries({ queryKey: ["services_mgmt"] });
+    setOpen(false);
+    setForm(empty);
+    toast({ title: "Saved" });
+  };
+
+  const togglePublish = async (s: any) => {
+    await supabase.from("services_mgmt").update({ is_published: !s.is_published }).eq("id", s.id);
+    qc.invalidateQueries({ queryKey: ["services_mgmt"] });
+  };
+
+  const remove = async (id: string) => {
+    if (!confirm("Delete this service?")) return;
+    await supabase.from("services_mgmt").delete().eq("id", id);
+    qc.invalidateQueries({ queryKey: ["services_mgmt"] });
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Services Management</h2>
-          <p className="text-gray-500">Enable, disable or edit the services you offer to clients.</p>
+          <h2 className="text-2xl font-bold">Services</h2>
+          <p className="text-muted-foreground">Create, edit and publish services shown on the website.</p>
         </div>
-        <Button className="bg-primary hover:bg-primary/90">
-          <Plus className="w-4 h-4 mr-2" /> Add New Service
-        </Button>
+        <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) setForm(empty); }}>
+          <DialogTrigger asChild><Button onClick={() => setForm(empty)}><Plus className="w-4 h-4 mr-2" />New Service</Button></DialogTrigger>
+          <DialogContent>
+            <DialogHeader><DialogTitle>{form.id ? "Edit" : "New"} Service</DialogTitle></DialogHeader>
+            <div className="space-y-3">
+              <Input placeholder="Title *" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+              <Input placeholder="Slug * (e.g. property-management)" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} />
+              <Textarea placeholder="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+              <Input placeholder="Icon (lucide name, e.g. Home)" value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value })} />
+              <Input type="number" placeholder="Sort order" value={form.sort_order} onChange={(e) => setForm({ ...form, sort_order: e.target.value })} />
+              <div className="flex items-center gap-2"><Switch checked={form.is_published} onCheckedChange={(v) => setForm({ ...form, is_published: v })} /><span>Published</span></div>
+              <Button onClick={save} className="w-full">Save</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {services.map((service) => (
-          <Card key={service.id} className={cn(
-            "overflow-hidden border-none shadow-sm transition-all hover:shadow-md",
-            service.status === 'Disabled' && "opacity-80"
-          )}>
-            <CardContent className="p-0">
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                      <Briefcase className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900">{service.name}</h3>
-                      <p className="text-xs text-gray-500 uppercase font-semibold tracking-wider">{service.category}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium text-gray-500 mr-1">
-                      {service.status === 'Enabled' ? 'Visible' : 'Hidden'}
-                    </span>
-                    <Switch 
-                      checked={service.status === 'Enabled'} 
-                      onCheckedChange={(checked) => {
-                        setServices(services.map(s => 
-                          s.id === service.id ? { ...s, status: checked ? 'Enabled' : 'Disabled' } : s
-                        ));
-                      }}
-                    />
-                  </div>
+      <div className="grid md:grid-cols-2 gap-4">
+        {services.map((s: any) => (
+          <Card key={s.id} className="border-none shadow-sm">
+            <CardContent className="p-5 space-y-3">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-bold">{s.title}</h3>
+                  <p className="text-xs text-muted-foreground">/{s.slug}</p>
                 </div>
-                
-                <p className="text-sm text-gray-600 mb-6 line-clamp-2 min-h-[40px]">
-                  {service.description}
-                </p>
-
-                <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-                  <div className="flex items-center gap-4">
-                    <div className="flex flex-col">
-                      <span className="text-xs text-gray-400">Total Inquiries</span>
-                      <span className="font-bold text-gray-900">{service.inquiries}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="sm" className="h-9 w-9 p-0 text-gray-400 hover:text-gray-900">
-                      <Edit2 className="w-4 h-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm" className="h-9 w-9 p-0 text-red-400 hover:text-red-600">
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
+                <Switch checked={s.is_published} onCheckedChange={() => togglePublish(s)} />
+              </div>
+              <p className="text-sm text-muted-foreground line-clamp-2">{s.description}</p>
+              <div className="flex gap-2 pt-2 border-t">
+                <Button size="sm" variant="ghost" onClick={() => { setForm(s); setOpen(true); }}><Edit2 className="w-4 h-4 mr-1" />Edit</Button>
+                <Button size="sm" variant="ghost" onClick={() => remove(s.id)}><Trash2 className="w-4 h-4 mr-1 text-destructive" />Delete</Button>
               </div>
             </CardContent>
           </Card>
@@ -85,8 +89,4 @@ export function AdminServices() {
       </div>
     </div>
   );
-}
-
-function cn(...inputs: any[]) {
-  return inputs.filter(Boolean).join(' ');
 }

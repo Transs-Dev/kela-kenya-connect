@@ -1,95 +1,75 @@
-
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Phone, MessageCircle } from 'lucide-react';
+import { useSlides, useSiteSettings } from '@/hooks/useAdminData';
 
 const Hero = () => {
-  const scrollToContact = () => {
-    const element = document.getElementById('contact');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  const { data: slides = [] } = useSlides();
+  const { data: settings = {} } = useSiteSettings();
+  const activeSlides = slides.filter((s: any) => s.is_active);
+  const [idx, setIdx] = useState(0);
 
-  const scrollToServices = () => {
-    const element = document.getElementById('services');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  useEffect(() => {
+    if (activeSlides.length < 2) return;
+    const t = setInterval(() => setIdx((i) => (i + 1) % activeSlides.length), 5000);
+    return () => clearInterval(t);
+  }, [activeSlides.length]);
 
-  const openWhatsApp = () => {
-    const whatsappUrl = `https://wa.me/254729218569?text=${encodeURIComponent('Hi! I would like to learn more about your services.')}`;
-    window.open(whatsappUrl, '_blank');
-  };
+  const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  const phone = (settings as any).contact?.whatsapp || '+254726285869';
+  const openWhatsApp = () => window.open(`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent('Hi! I would like to learn more about your services.')}`, '_blank');
+
+  const heroTitle = (settings as any).homepage?.heroTitle || 'Simplifying Life Across Borders';
+  const heroSubtitle = (settings as any).homepage?.heroSubtitle || 'Kela empowers Kenyans abroad by simplifying property, travel, and digital needs.';
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-pink-100 dark:from-gray-900 dark:to-gray-800 pt-20">
-      <div className="container mx-auto px-4 py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Text Content */}
-          <div className="text-center lg:text-left animate-fade-in">
-            <div className="mb-4">
-              <span className="text-lg md:text-xl text-pink-800 dark:text-pink-400 font-semibold">
-              
-              </span>
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
-              Simplifying Life 
-              <span className="text-pink-800 dark:text-pink-400"> Across Borders</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-              Kela empowers Kenyans abroad by simplifying property, travel, and digital needs. 
-              We ensure convenience, trust, and connection.
-            </p>
-            
-            {/* Animated CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button 
-                onClick={scrollToServices}
-                size="lg"
-                className="bg-pink-800 hover:bg-pink-900 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:rotate-1 group"
-              >
-                Explore Services
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              
-              <Button 
-                onClick={openWhatsApp}
-                variant="outline"
-                size="lg"
-                className="border-2 border-pink-800 text-pink-800 hover:bg-pink-800 hover:text-white px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:-rotate-1 group"
-              >
-                <MessageCircle className="mr-2 w-5 h-5 group-hover:animate-pulse" />
-                Chat Now
-              </Button>
-              
-              <Button 
-                onClick={scrollToContact}
-                variant="ghost"
-                size="lg"
-                className="text-pink-800 hover:text-pink-900 hover:bg-pink-50 dark:hover:bg-pink-900/20 px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 group"
-              >
-                <Phone className="mr-2 w-5 h-5 group-hover:animate-bounce" />
-                Call Us
-              </Button>
-            </div>
-          </div>
+    <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+      {/* Slideshow backgrounds */}
+      {activeSlides.length > 0 ? (
+        activeSlides.map((s: any, i: number) => (
+          <div
+            key={s.id}
+            className="absolute inset-0 transition-opacity duration-1000 bg-cover bg-center"
+            style={{ backgroundImage: `url(${s.image_url})`, opacity: i === idx ? 1 : 0 }}
+          />
+        ))
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-pink-50 to-pink-100 dark:from-gray-900 dark:to-gray-800" />
+      )}
+      {activeSlides.length > 0 && <div className="absolute inset-0 bg-black/40" />}
 
-          {/* Hero Image */}
-          <div className="relative animate-fade-in">
-            <div className="relative z-10">
-              <img 
-                src="/portfolio2.jpeg"
-                alt="Kela Assistance Services - Professional support across borders"
-                className="rounded-2xl shadow-2xl w-full h-[400px] md:h-[500px] object-cover"
-              />
+      <div className="container relative z-10 mx-auto px-4 py-20">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className={`text-center lg:text-left animate-fade-in ${activeSlides.length > 0 ? 'text-white' : ''}`}>
+            <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight ${activeSlides.length > 0 ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+              {heroTitle.split(' ').slice(0, -2).join(' ')}{' '}
+              <span className="text-primary">{heroTitle.split(' ').slice(-2).join(' ')}</span>
+            </h1>
+            <p className={`text-xl md:text-2xl mb-8 leading-relaxed ${activeSlides.length > 0 ? 'text-white/90' : 'text-gray-600 dark:text-gray-300'}`}>
+              {heroSubtitle}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <Button onClick={() => scrollTo('services')} size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 text-lg font-semibold group">
+                Explore Services<ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+              <Button onClick={openWhatsApp} variant="outline" size="lg" className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-4 text-lg font-semibold bg-background/80 backdrop-blur">
+                <MessageCircle className="mr-2 w-5 h-5" />Chat Now
+              </Button>
+              <Button onClick={() => scrollTo('contact')} variant="ghost" size="lg" className={`px-8 py-4 text-lg font-semibold ${activeSlides.length > 0 ? 'text-white hover:bg-white/10' : 'text-primary'}`}>
+                <Phone className="mr-2 w-5 h-5" />Call Us
+              </Button>
             </div>
-            {/* Decorative background elements */}
-            <div className="absolute -top-4 -right-4 w-20 h-20 bg-pink-200 rounded-full opacity-50 animate-pulse"></div>
-            <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-pink-300 rounded-full opacity-50 animate-pulse delay-1000"></div>
           </div>
         </div>
       </div>
+
+      {activeSlides.length > 1 && (
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+          {activeSlides.map((_: any, i: number) => (
+            <button key={i} onClick={() => setIdx(i)} className={`h-2 rounded-full transition-all ${i === idx ? 'w-8 bg-white' : 'w-2 bg-white/50'}`} />
+          ))}
+        </div>
+      )}
     </section>
   );
 };
