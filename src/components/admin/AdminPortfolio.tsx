@@ -1,87 +1,97 @@
-import { useState } from 'react';
-import { Plus, Image as ImageIcon, Trash2, Edit2, ExternalLink, Filter } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { useState } from "react";
+import { Plus, Trash2, Edit2, Upload } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { usePortfolio } from "@/hooks/useAdminData";
+import { supabase } from "@/integrations/supabase/client";
+import { fileToDataUrl } from "@/lib/adminApi";
+import { toast } from "@/hooks/use-toast";
+import { useQueryClient } from "@tanstack/react-query";
+
+const empty = { id: "", title: "", description: "", image_url: "", category: "", sort_order: 0 };
 
 export function AdminPortfolio() {
-  const projects = [
-    { id: 1, title: 'Luxury Villa Management', category: 'Property', image: '/portfolio1.jpeg', status: 'Published' },
-    { id: 2, title: 'Modern Office Construction', category: 'Construction', image: '/portfolio2.jpeg', status: 'Published' },
-    { id: 3, title: 'Bespoke Safari Planning', category: 'Travel', image: '/portfolio3.jpeg', status: 'Draft' },
-    { id: 4, title: 'Residential Renovation', category: 'Construction', image: '/portfolio1.jpeg', status: 'Published' },
-  ];
+  const { data: items = [] } = usePortfolio();
+  const qc = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState<any>(empty);
+  const [uploading, setUploading] = useState(false);
+
+  const onUpload = async (file: File) => {
+    setUploading(true);
+    try {
+      const url = await fileToDataUrl(file);
+      setForm({ ...form, image_url: url });
+    } finally { setUploading(false); }
+  };
+
+  const save = async () => {
+    if (!form.title) return toast({ title: "Title required", variant: "destructive" });
+    const payload = { title: form.title, description: form.description, image_url: form.image_url, category: form.category, sort_order: Number(form.sort_order) || 0 };
+    const { error } = form.id
+      ? await supabase.from("portfolio_items").update(payload).eq("id", form.id)
+      : await supabase.from("portfolio_items").insert(payload);
+    if (error) return toast({ title: "Failed", description: error.message, variant: "destructive" });
+    qc.invalidateQueries({ queryKey: ["portfolio"] });
+    setOpen(false); setForm(empty);
+    toast({ title: "Saved" });
+  };
+
+  const remove = async (id: string) => {
+    if (!confirm("Delete?")) return;
+    await supabase.from("portfolio_items").delete().eq("id", id);
+    qc.invalidateQueries({ queryKey: ["portfolio"] });
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Portfolio & Projects</h2>
-          <p className="text-gray-500">Showcase your best work and completed projects to potential clients.</p>
+          <h2 className="text-2xl font-bold">Portfolio</h2>
+          <p className="text-muted-foreground">Manage projects shown on the public site.</p>
         </div>
-        <Button className="bg-primary hover:bg-primary/90">
-          <Plus className="w-4 h-4 mr-2" /> New Project
-        </Button>
+        <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) setForm(empty); }}>
+          <DialogTrigger asChild><Button onClick={() => setForm(empty)}><Plus className="w-4 h-4 mr-2" />New Project</Button></DialogTrigger>
+          <DialogContent>
+            <DialogHeader><DialogTitle>{form.id ? "Edit" : "New"} Project</DialogTitle></DialogHeader>
+            <div className="space-y-3">
+              <Input placeholder="Title *" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+              <Textarea placeholder="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+              <Input placeholder="Category" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} />
+              <Input type="number" placeholder="Sort order" value={form.sort_order} onChange={(e) => setForm({ ...form, sort_order: e.target.value })} />
+              <label className="block">
+                <span className="text-sm font-medium">Image (upload from your computer)</span>
+                <div className="mt-2 flex items-center gap-2">
+                  <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && onUpload(e.target.files[0])} className="text-sm" />
+                  {uploading && <span className="text-xs text-muted-foreground">Processing…</span>}
+                </div>
+                {form.image_url && <img src={form.image_url} className="mt-3 h-32 rounded-lg object-cover" alt="" />}
+              </label>
+              <Button onClick={save} className="w-full">Save</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
-      <div className="flex items-center gap-3 bg-white p-3 rounded-xl border border-gray-100 shadow-sm overflow-x-auto">
-        {['All Projects', 'Construction', 'Property', 'Travel', 'General'].map((cat) => (
-          <Button key={cat} variant={cat === 'All Projects' ? 'secondary' : 'ghost'} className="rounded-lg h-9">
-            {cat}
-          </Button>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {projects.map((project) => (
-          <Card key={project.id} className="group overflow-hidden border-none shadow-sm hover:shadow-md transition-all">
-            <CardContent className="p-0">
-              <div className="relative aspect-video overflow-hidden bg-gray-100">
-                <img 
-                  src={project.image} 
-                  alt={project.title} 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                  <Button size="sm" variant="secondary" className="h-9 w-9 p-0 rounded-full">
-                    <Edit2 className="w-4 h-4" />
-                  </Button>
-                  <Button size="sm" variant="destructive" className="h-9 w-9 p-0 rounded-full">
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-                <div className="absolute top-2 left-2">
-                  <Badge className={cn(
-                    "font-medium",
-                    project.status === 'Published' ? "bg-green-500 text-white" : "bg-gray-500 text-white"
-                  )}>
-                    {project.status}
-                  </Badge>
-                </div>
-              </div>
-              <div className="p-4">
-                <p className="text-[10px] text-primary font-bold uppercase tracking-widest mb-1">{project.category}</p>
-                <h3 className="font-bold text-gray-900 line-clamp-1">{project.title}</h3>
-                <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-50">
-                  <span className="text-xs text-gray-400">Added Oct 12, 2023</span>
-                  <Button variant="ghost" size="sm" className="h-8 text-primary hover:text-primary hover:bg-primary/5 p-2">
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </Button>
-                </div>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {items.map((p: any) => (
+          <Card key={p.id} className="border-none shadow-sm overflow-hidden">
+            {p.image_url && <img src={p.image_url} className="h-44 w-full object-cover" alt={p.title} />}
+            <CardContent className="p-4 space-y-2">
+              <h3 className="font-bold">{p.title}</h3>
+              {p.category && <p className="text-xs uppercase tracking-wider text-primary font-semibold">{p.category}</p>}
+              <p className="text-sm text-muted-foreground line-clamp-2">{p.description}</p>
+              <div className="flex gap-2 pt-2 border-t">
+                <Button size="sm" variant="ghost" onClick={() => { setForm(p); setOpen(true); }}><Edit2 className="w-4 h-4 mr-1" />Edit</Button>
+                <Button size="sm" variant="ghost" onClick={() => remove(p.id)}><Trash2 className="w-4 h-4 mr-1 text-destructive" />Delete</Button>
               </div>
             </CardContent>
           </Card>
         ))}
-
-        <button className="aspect-video rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-2 text-gray-400 hover:border-primary hover:text-primary transition-all bg-gray-50/50">
-          <Plus className="w-6 h-6" />
-          <span className="text-sm font-medium">Add Project</span>
-        </button>
       </div>
     </div>
   );
-}
-
-function cn(...inputs: any[]) {
-  return inputs.filter(Boolean).join(' ');
 }
