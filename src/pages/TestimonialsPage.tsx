@@ -15,6 +15,12 @@ const testimonials = [
 ];
 
 const TestimonialsPage = () => {
+  const { data: cloud = [] } = useTestimonials();
+  const cloudApproved = cloud.filter((t: any) => t.is_approved).map((t: any) => ({
+    name: t.client_name, location: t.location || '', service: t.service || '', date: new Date(t.created_at || Date.now()).toLocaleDateString(), text: t.content, outcome: '',
+  }));
+  const all = [...cloudApproved, ...testimonials];
+
   return (
     <>
       <SEO title="Client Stories — Kela Assistance" description="Real stories from Kenyans abroad who trust Kela." />
@@ -27,20 +33,20 @@ const TestimonialsPage = () => {
       <section className="py-20 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {testimonials.map((t) => (
-              <article key={t.name + t.date} className="p-7 rounded-2xl bg-gradient-to-br from-pink-50 to-white dark:from-gray-800 dark:to-gray-800 border border-pink-100 dark:border-gray-700 flex flex-col">
+            {all.map((t, i) => (
+              <article key={t.name + i} className="p-7 rounded-2xl bg-gradient-to-br from-pink-50 to-white dark:from-gray-800 dark:to-gray-800 border border-pink-100 dark:border-gray-700 flex flex-col">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex text-yellow-400">{[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}</div>
                   <span className="text-xs text-gray-500">{t.date}</span>
                 </div>
-                <span className="inline-block self-start px-3 py-1 text-xs font-semibold rounded-full bg-[#800024]/10 text-[#800024] mb-3">{t.service}</span>
+                {t.service && <span className="inline-block self-start px-3 py-1 text-xs font-semibold rounded-full bg-[#800024]/10 text-[#800024] mb-3">{t.service}</span>}
                 <p className="text-gray-700 dark:text-gray-200 italic leading-relaxed mb-5 flex-1">"{t.text}"</p>
-                <div className="text-sm font-semibold text-[#800024] mb-4">Outcome: {t.outcome}</div>
+                {t.outcome && <div className="text-sm font-semibold text-[#800024] mb-4">Outcome: {t.outcome}</div>}
                 <div className="flex items-center gap-3 pt-4 border-t border-pink-100 dark:border-gray-700">
                   <div className="w-10 h-10 rounded-full bg-[#800024] text-white flex items-center justify-center font-bold">{t.name.charAt(0)}</div>
                   <div>
                     <div className="font-semibold text-gray-900 dark:text-white">{t.name}</div>
-                    <div className="text-xs text-gray-500 flex items-center gap-1"><MapPin className="w-3 h-3" /> {t.location}</div>
+                    {t.location && <div className="text-xs text-gray-500 flex items-center gap-1"><MapPin className="w-3 h-3" /> {t.location}</div>}
                   </div>
                 </div>
               </article>
@@ -48,6 +54,7 @@ const TestimonialsPage = () => {
           </div>
         </div>
       </section>
+      <TestimonialForm />
       <CTASection />
     </>
   );
