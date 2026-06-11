@@ -5,6 +5,7 @@ import CTASection from '@/components/CTASection';
 import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { SERVICES, getService } from '@/data/services';
+import ServiceBookingForm from '@/components/ServiceBookingForm';
 import { openWhatsApp, callPhone, PHONE_DISPLAY } from '@/lib/contact';
 
 const ServiceDetail = () => {
