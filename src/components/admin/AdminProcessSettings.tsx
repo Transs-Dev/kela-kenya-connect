@@ -96,8 +96,9 @@ export function AdminSettings() {
   }, [settings]);
 
   const saveKey = async (key: string, value: any) => {
-    const { error } = await supabase.from("site_settings").update({ value, updated_at: new Date().toISOString() }).eq("key", key);
+    const { error } = await supabase.from("site_settings").upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: "key" });
     if (error) return toast({ title: "Failed", description: error.message, variant: "destructive" });
+    await logActivity("update", "site_settings", key, value);
     qc.invalidateQueries({ queryKey: ["site_settings"] });
     toast({ title: `${key} saved` });
   };
