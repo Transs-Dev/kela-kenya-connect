@@ -10,6 +10,7 @@ import { useTestimonials } from "@/hooks/useAdminData";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { logActivity } from "@/lib/adminApi";
 
 const empty = { client_name: "", location: "", service: "", content: "", rating: 5, is_approved: true };
 
