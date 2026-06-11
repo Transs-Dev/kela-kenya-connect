@@ -10,6 +10,7 @@ import { useServicesMgmt } from "@/hooks/useAdminData";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { logActivity } from "@/lib/adminApi";
 
 const empty = { id: "", title: "", slug: "", description: "", icon: "Sparkles", sort_order: 0, is_published: true };
 
