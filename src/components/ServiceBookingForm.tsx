@@ -21,10 +21,8 @@ const ServiceBookingForm = ({ serviceTitle, serviceSlug }: Props) => {
     const { error: e1 } = await supabase.from("service_requests").insert({
       client_name: form.name,
       client_email: form.email,
-      client_phone: form.phone || null,
-      service_type: serviceTitle,
-      preferred_date: form.preferred_date || null,
-      notes: form.notes || null,
+      service: serviceTitle,
+      description: `Phone: ${form.phone || "—"}\nPreferred date: ${form.preferred_date || "—"}\n\n${form.notes || ""}`.trim(),
       status: "pending",
     });
 
