@@ -213,6 +213,8 @@ const Index = () => {
         </div>
       </section>
 
+      <Testimonials />
+      <TestimonialForm />
       <CTASection />
     </>
   );
