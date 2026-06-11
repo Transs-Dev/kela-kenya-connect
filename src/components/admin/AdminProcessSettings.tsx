@@ -10,6 +10,7 @@ import { useProcessStages, useSiteSettings } from "@/hooks/useAdminData";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { logActivity } from "@/lib/adminApi";
 
 export function AdminProcess() {
   const { data: stages = [] } = useProcessStages();
@@ -95,8 +96,9 @@ export function AdminSettings() {
   }, [settings]);
 
   const saveKey = async (key: string, value: any) => {
-    const { error } = await supabase.from("site_settings").update({ value, updated_at: new Date().toISOString() }).eq("key", key);
+    const { error } = await supabase.from("site_settings").upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: "key" });
     if (error) return toast({ title: "Failed", description: error.message, variant: "destructive" });
+    await logActivity("update", "site_settings", key, value);
     qc.invalidateQueries({ queryKey: ["site_settings"] });
     toast({ title: `${key} saved` });
   };

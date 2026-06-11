@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { useSlides } from "@/hooks/useAdminData";
 import { supabase } from "@/integrations/supabase/client";
-import { fileToDataUrl } from "@/lib/adminApi";
+import { uploadToStorage, logActivity } from "@/lib/adminApi";
 import { toast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -19,11 +19,12 @@ export function AdminHomepageSlides() {
   const onUpload = async (file: File) => {
     setUploading(true);
     try {
-      const url = await fileToDataUrl(file);
-      const { error } = await supabase.from("homepage_slides").insert({
+      const url = await uploadToStorage(file, "slides");
+      const { data, error } = await supabase.from("homepage_slides").insert({
         image_url: url, caption, sort_order: slides.length, is_active: true,
-      });
+      }).select().single();
       if (error) throw error;
+      await logActivity("create", "homepage_slides", data?.id, { caption });
       qc.invalidateQueries({ queryKey: ["slides"] });
       setCaption("");
       toast({ title: "Slide added" });
@@ -34,12 +35,14 @@ export function AdminHomepageSlides() {
 
   const toggle = async (s: any) => {
     await supabase.from("homepage_slides").update({ is_active: !s.is_active }).eq("id", s.id);
+    await logActivity(s.is_active ? "hide" : "show", "homepage_slides", s.id);
     qc.invalidateQueries({ queryKey: ["slides"] });
   };
 
   const remove = async (id: string) => {
     if (!confirm("Delete slide?")) return;
     await supabase.from("homepage_slides").delete().eq("id", id);
+    await logActivity("delete", "homepage_slides", id);
     qc.invalidateQueries({ queryKey: ["slides"] });
   };
 

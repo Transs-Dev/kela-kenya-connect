@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { usePortfolio } from "@/hooks/useAdminData";
 import { supabase } from "@/integrations/supabase/client";
-import { fileToDataUrl } from "@/lib/adminApi";
+import { uploadToStorage, logActivity } from "@/lib/adminApi";
 import { toast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -23,18 +23,21 @@ export function AdminPortfolio() {
   const onUpload = async (file: File) => {
     setUploading(true);
     try {
-      const url = await fileToDataUrl(file);
+      const url = await uploadToStorage(file, "portfolio");
       setForm({ ...form, image_url: url });
+    } catch (e: any) {
+      toast({ title: "Upload failed", description: e.message, variant: "destructive" });
     } finally { setUploading(false); }
   };
 
   const save = async () => {
     if (!form.title) return toast({ title: "Title required", variant: "destructive" });
     const payload = { title: form.title, description: form.description, image_url: form.image_url, category: form.category, sort_order: Number(form.sort_order) || 0 };
-    const { error } = form.id
-      ? await supabase.from("portfolio_items").update(payload).eq("id", form.id)
-      : await supabase.from("portfolio_items").insert(payload);
-    if (error) return toast({ title: "Failed", description: error.message, variant: "destructive" });
+    const result = form.id
+      ? await supabase.from("portfolio_items").update(payload).eq("id", form.id).select().single()
+      : await supabase.from("portfolio_items").insert(payload).select().single();
+    if (result.error) return toast({ title: "Failed", description: result.error.message, variant: "destructive" });
+    await logActivity(form.id ? "update" : "create", "portfolio_items", result.data?.id, { title: form.title });
     qc.invalidateQueries({ queryKey: ["portfolio"] });
     setOpen(false); setForm(empty);
     toast({ title: "Saved" });
@@ -43,6 +46,7 @@ export function AdminPortfolio() {
   const remove = async (id: string) => {
     if (!confirm("Delete?")) return;
     await supabase.from("portfolio_items").delete().eq("id", id);
+    await logActivity("delete", "portfolio_items", id);
     qc.invalidateQueries({ queryKey: ["portfolio"] });
   };
 

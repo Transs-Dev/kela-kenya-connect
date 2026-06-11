@@ -10,6 +10,7 @@ import { useServicesMgmt } from "@/hooks/useAdminData";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { logActivity } from "@/lib/adminApi";
 
 const empty = { id: "", title: "", slug: "", description: "", icon: "Sparkles", sort_order: 0, is_published: true };
 
@@ -22,10 +23,11 @@ export function AdminServices() {
   const save = async () => {
     if (!form.title || !form.slug) return toast({ title: "Title & slug required", variant: "destructive" });
     const payload = { title: form.title, slug: form.slug, description: form.description, icon: form.icon, sort_order: Number(form.sort_order) || 0, is_published: form.is_published };
-    const { error } = form.id
-      ? await supabase.from("services_mgmt").update(payload).eq("id", form.id)
-      : await supabase.from("services_mgmt").insert(payload);
-    if (error) return toast({ title: "Failed", description: error.message, variant: "destructive" });
+    const result = form.id
+      ? await supabase.from("services_mgmt").update(payload).eq("id", form.id).select().single()
+      : await supabase.from("services_mgmt").insert(payload).select().single();
+    if (result.error) return toast({ title: "Failed", description: result.error.message, variant: "destructive" });
+    await logActivity(form.id ? "update" : "create", "services_mgmt", result.data?.id, { title: form.title });
     qc.invalidateQueries({ queryKey: ["services_mgmt"] });
     setOpen(false);
     setForm(empty);
@@ -34,12 +36,14 @@ export function AdminServices() {
 
   const togglePublish = async (s: any) => {
     await supabase.from("services_mgmt").update({ is_published: !s.is_published }).eq("id", s.id);
+    await logActivity(s.is_published ? "unpublish" : "publish", "services_mgmt", s.id, { title: s.title });
     qc.invalidateQueries({ queryKey: ["services_mgmt"] });
   };
 
   const remove = async (id: string) => {
     if (!confirm("Delete this service?")) return;
     await supabase.from("services_mgmt").delete().eq("id", id);
+    await logActivity("delete", "services_mgmt", id);
     qc.invalidateQueries({ queryKey: ["services_mgmt"] });
   };
 

@@ -10,6 +10,7 @@ import { useTestimonials } from "@/hooks/useAdminData";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { logActivity } from "@/lib/adminApi";
 
 const empty = { client_name: "", location: "", service: "", content: "", rating: 5, is_approved: true };
 
@@ -21,8 +22,9 @@ export function AdminTestimonials() {
 
   const save = async () => {
     if (!form.client_name || !form.content) return toast({ title: "Name & content required", variant: "destructive" });
-    const { error } = await supabase.from("testimonials").insert({ ...form, rating: Number(form.rating) });
+    const { data, error } = await supabase.from("testimonials").insert({ ...form, rating: Number(form.rating) }).select().single();
     if (error) return toast({ title: "Failed", description: error.message, variant: "destructive" });
+    await logActivity("create", "testimonials", data?.id, { client_name: form.client_name });
     qc.invalidateQueries({ queryKey: ["testimonials"] });
     setOpen(false); setForm(empty);
     toast({ title: "Added" });
@@ -30,12 +32,14 @@ export function AdminTestimonials() {
 
   const toggleApprove = async (t: any) => {
     await supabase.from("testimonials").update({ is_approved: !t.is_approved }).eq("id", t.id);
+    await logActivity(t.is_approved ? "reject" : "approve", "testimonials", t.id, { client_name: t.client_name });
     qc.invalidateQueries({ queryKey: ["testimonials"] });
   };
 
   const remove = async (id: string) => {
     if (!confirm("Delete?")) return;
     await supabase.from("testimonials").delete().eq("id", id);
+    await logActivity("delete", "testimonials", id);
     qc.invalidateQueries({ queryKey: ["testimonials"] });
   };
 

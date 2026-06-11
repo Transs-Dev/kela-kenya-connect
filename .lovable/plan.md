@@ -1,64 +1,48 @@
-# Dynamic Admin Panel — Implementation Plan
+## KELA Platform — Cloud Media, Audit Log, Messaging, Testimonials, AI Assistant & More
 
-A full cloud-backed redesign of the admin system. No mock data anywhere. All reads/writes go through Lovable Cloud (Supabase) with realtime subscriptions where it matters.
+A comprehensive upgrade turning the admin panel and public site into a fully cloud-driven system.
 
-## 1. Backend (single migration)
+### 1. Cloud Storage for Media
+- Create public Supabase Storage bucket `media` with RLS policies (public read, authenticated write).
+- New helper `uploadToStorage(file, folder)` in `src/lib/adminApi.ts` replacing `fileToDataUrl`.
+- Update `AdminHomepageSlides`, `AdminPortfolio`, and `AdminSettings` (logo/branding) to upload to bucket and store returned public URL.
+- Migrate references everywhere (Hero, Portfolio, Settings) to use URLs from DB.
 
-New tables in `public` (all with RLS + GRANTs):
+### 2. Admin Activity Audit Log
+- New table `audit_logs` (actor, action, entity, entity_id, details JSONB, created_at).
+- Helper `logActivity()` called from every admin mutation (services, requests, testimonials, portfolio, messages, slides, settings).
+- New admin section "Activity Log" with filterable list, realtime updates.
 
-- `clients` — name, email, phone, country, notes
-- `service_requests` — client_id, service, status (pending/in_progress/completed/on_hold), assigned_to, internal_notes
-- `messages` — sender_name, email, subject, body, status (unread/read/archived)
-- `services_mgmt` — title, slug, description, icon, is_published, sort_order
-- `portfolio_items` — title, description, image_url, category, sort_order
-- `testimonials` — client_name, location, service, content, rating, is_approved
-- `process_stages` — title, description, step_number, is_active
-- `site_settings` — single-row key/value JSONB (contact info, branding, homepage copy)
-- `homepage_slides` — image_url, caption, sort_order, is_active
+### 3. Messages / Inquiries Pipeline
+- Public `Contact.tsx` form already inserts into `contact_submissions` — verify and ensure realtime visible in `AdminMessages`.
+- New `ServiceBookingForm` component on each ServiceDetail page → inserts into `service_requests` AND `messages` so admin sees it.
+- Add realtime subscription for `contact_submissions` in admin.
 
-Keep existing `contact_submissions` — surface it inside Messages.
+### 4. Public Testimonial Submission
+- New `TestimonialForm` component on homepage + Testimonials page.
+- Inserts with `is_approved=false` → shows in admin moderation queue.
+- Public Testimonials only show approved.
 
-**Storage buckets** (public, created via tool):
-- `homepage-slides` — background slideshow images
-- `portfolio` — portfolio project images
-- `site-assets` — logos / branding
+### 5. Portfolio & Services Sync
+- Public `Portfolio.tsx` already queries `portfolio_items` — verify queries don't filter incorrectly. Drop hardcoded FALLBACK or only show as last resort.
+- Public Services page must query `services_mgmt` where `is_published=true`.
 
-**RLS strategy** (admin uses PIN-based client gate — no auth users yet):
-- Public SELECT on published content (`services_mgmt` where published, active `homepage_slides`, approved `testimonials`, `portfolio_items`, active `process_stages`, `site_settings`)
-- All writes + admin reads via SECURITY DEFINER RPCs (`admin_*`) since there's no Supabase auth
-- Public INSERT on `messages` (anyone can contact)
-- Realtime enabled on `messages`, `service_requests`, `contact_submissions`
+### 6. Website Settings Driving Public Site
+- Ensure `site_settings` is consumed by Header (logo), Footer (contact, social), Contact section (phone/email/whatsapp), Hero (tagline) via a `useSiteSettings()` hook.
 
-## 2. Admin UI (rebuilt, no mock data)
+### 7. Lovable AI Chatbot
+- Edge function `ai-assistant` using Lovable AI Gateway (`google/gemini-3-flash-preview`) with system prompt about KELA services.
+- Floating chat bubble bottom-right, ABOVE WhatsApp button (stacked vertically).
+- New `AIAssistant.tsx` component with chat UI.
 
-All sections use TanStack Query + Supabase realtime channels:
+### 8. Service Booking Forms
+- Add booking form on each service detail page (name, email, phone, preferred date, message).
+- Submission inserts into `service_requests` + `messages` for admin notification.
 
-- **WelcomeBanner** — auto-shows on admin login, dismisses after 20s
-- **AdminOverview** — live counts (clients, active requests, completed, new inquiries) + recent activity feed from `service_requests` + `messages`
-- **Homepage Slides Manager** — file upload from computer → storage bucket → `homepage_slides` row; reorder, toggle active, delete
-- **Service Requests** — list/filter, edit status, assign, add internal notes (live)
-- **Messages / Inbox** — unified view of `messages` + `contact_submissions`, realtime, mark read/archive, reply via mailto
-- **Services** — create/edit/publish/unpublish, sort
-- **Portfolio** — image upload, CRUD, reorder
-- **Testimonials** — CRUD + approve toggle
-- **Process Stages** — CRUD, reorder, toggle active
-- **Settings** — edit `site_settings` JSON (contact phone/email, brand colors, hero copy, social links)
+### 9. Welcome Popup
+- Re-enable/recreate `WelcomePopup` mounted in `MainLayout`, shows once per session, auto-dismiss after 20s.
 
-## 3. Public site wiring
-
-Replace hardcoded data in `Hero` (slides), `Services`/`EnhancedServices`, `Portfolio`, `Testimonials`, `OurProcess`, `Contact`, `Footer` with live queries from the new tables. Falls back gracefully when empty.
-
-## 4. Out of scope
-
-- Real Supabase auth for admin (keep existing PIN gate; admin RPCs are intentionally callable — noted as a follow-up to harden with real auth + roles)
-- Email sending (reply uses mailto)
-- Drag-and-drop reordering polish (use number input for sort_order)
-
-## 5. Files
-
-**Migration:** `supabase/migrations/<timestamp>_admin_dynamic.sql`
-**New:** `src/components/admin/WelcomeBanner.tsx`, `AdminHomepageSlides.tsx`, `AdminSettings.tsx`; `src/hooks/useAdminData.ts` (rewritten to use supabase); `src/lib/adminApi.ts`
-**Rewritten (remove mock data):** `AdminOverview.tsx`, `AdminClients.tsx`, `AdminRequests.tsx`, `AdminMessages.tsx`, `AdminServices.tsx`, `AdminPortfolio.tsx`, `AdminTestimonials.tsx`, `AdminProcessSettings.tsx`, `AdminSidebar.tsx`, `Admin.tsx`
-**Updated public components:** `Hero.tsx`, `Services.tsx`/`EnhancedServices.tsx`, `Portfolio.tsx`, `Testimonials.tsx`, `OurProcess.tsx`, `Contact.tsx`, `Footer.tsx`
-
-Confirm to proceed and I'll ship migration + storage buckets + all admin/public rewiring in parallel.
+### Technical
+- Single migration adds `audit_logs` table, storage bucket, updates RLS so anon can insert testimonials/messages, public can read approved testimonials & published content.
+- New files: `src/lib/audit.ts`, `src/hooks/useSiteSettings.ts`, `src/components/AIAssistant.tsx`, `src/components/TestimonialForm.tsx`, `src/components/ServiceBookingForm.tsx`, `src/components/admin/AdminAuditLog.tsx`, `supabase/functions/ai-assistant/index.ts`.
+- Updated: AdminSidebar, AdminHomepageSlides, AdminPortfolio, AdminSettings, Hero, Portfolio (remove fallback), Services public, Footer, Header, Contact, MainLayout, ServiceDetail.

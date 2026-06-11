@@ -3,6 +3,8 @@ import { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WhatsAppChatbot from '@/components/WhatsAppChatbot';
+import AIAssistant from '@/components/AIAssistant';
+import WelcomePopup from '@/components/WelcomePopup';
 
 const MainLayout = () => {
   const { pathname } = useLocation();
@@ -18,6 +20,8 @@ const MainLayout = () => {
         <Outlet />
       </main>
       <Footer />
+      <WelcomePopup />
+      <AIAssistant />
       <WhatsAppChatbot />
     </div>
   );

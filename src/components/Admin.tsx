@@ -10,6 +10,7 @@ import { AdminPortfolio } from "./admin/AdminPortfolio";
 import { AdminTestimonials } from "./admin/AdminTestimonials";
 import { AdminProcess, AdminSettings } from "./admin/AdminProcessSettings";
 import { AdminHomepageSlides } from "./admin/AdminHomepageSlides";
+import { AdminAuditLog } from "./admin/AdminAuditLog";
 import { WelcomeBanner } from "./admin/WelcomeBanner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -82,6 +83,7 @@ const Admin = () => {
       case "portfolio": return <AdminPortfolio />;
       case "testimonials": return <AdminTestimonials />;
       case "process": return <AdminProcess />;
+      case "audit": return <AdminAuditLog />;
       case "settings": return <AdminSettings />;
       default: return <AdminOverview />;
     }
