@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { PHONE_DISPLAY, EMAIL, PHONE_NUMBER } from '@/lib/contact';
 import { SERVICES } from '@/data/services';
+import { useSiteSettings } from '@/hooks/useAdminData';
 
 const Footer = () => {
   return (
