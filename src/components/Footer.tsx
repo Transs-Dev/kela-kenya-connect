@@ -5,6 +5,15 @@ import { SERVICES } from '@/data/services';
 import { useSiteSettings } from '@/hooks/useAdminData';
 
 const Footer = () => {
+  const { data: settings = {} } = useSiteSettings();
+  const contact = (settings as any).contact || {};
+  const branding = (settings as any).branding || {};
+  const social = (settings as any).social || {};
+  const phone = contact.phone || PHONE_DISPLAY;
+  const phoneNum = (contact.phone || PHONE_NUMBER).replace(/[^0-9+]/g, '');
+  const email = contact.email || EMAIL;
+  const address = contact.address || 'Serving Kenyans worldwide';
+  const brandName = branding.brandName || 'Kela';
   return (
     <footer className="bg-gray-950 text-gray-300">
       <div className="container mx-auto px-4 py-16">
