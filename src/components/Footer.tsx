@@ -20,10 +20,10 @@ const Footer = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <img src="/logo.jpeg" alt="Kela" className="w-12 h-12 rounded-lg object-cover" />
+              <img src={branding.logoUrl || "/logo.jpeg"} alt={brandName} className="w-12 h-12 rounded-lg object-cover" />
               <div>
-                <div className="text-white font-bold text-lg leading-tight">Kela</div>
-                <div className="text-xs text-gray-400">Kenyans Living Abroad</div>
+                <div className="text-white font-bold text-lg leading-tight">{brandName}</div>
+                <div className="text-xs text-gray-400">{branding.tagline || 'Kenyans Living Abroad'}</div>
               </div>
             </div>
             <p className="text-sm leading-relaxed text-gray-400">
