@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, MessageSquare, Settings, Briefcase, Star, FileText, Clock, LogOut, ChevronRight, Image } from "lucide-react";
+import { LayoutDashboard, Users, MessageSquare, Settings, Briefcase, Star, FileText, Clock, LogOut, ChevronRight, Image, Activity } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarGroup, SidebarGroupLabel, SidebarGroupContent } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 
@@ -14,6 +14,7 @@ const menuItems = [
   { id: "portfolio", label: "Portfolio", icon: FileText },
   { id: "testimonials", label: "Testimonials", icon: Star },
   { id: "process", label: "Process Tracking", icon: ChevronRight },
+  { id: "audit", label: "Activity Log", icon: Activity },
   { id: "settings", label: "Settings", icon: Settings },
 ];
 
