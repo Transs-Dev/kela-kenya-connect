@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { useSlides } from "@/hooks/useAdminData";
 import { supabase } from "@/integrations/supabase/client";
-import { fileToDataUrl } from "@/lib/adminApi";
+import { uploadToStorage, logActivity } from "@/lib/adminApi";
 import { toast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 
