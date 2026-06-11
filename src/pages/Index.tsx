@@ -5,6 +5,8 @@ import SEO from '@/components/SEO';
 import ServiceCard from '@/components/ServiceCard';
 import CTASection from '@/components/CTASection';
 import { SERVICES } from '@/data/services';
+import TestimonialForm from '@/components/TestimonialForm';
+import Testimonials from '@/components/Testimonials';
 import { openWhatsApp, callPhone, PHONE_DISPLAY } from '@/lib/contact';
 
 const stats = [
