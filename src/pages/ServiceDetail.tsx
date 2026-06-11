@@ -73,7 +73,7 @@ const ServiceDetail = () => {
               </div>
             </div>
 
-            <aside className="lg:sticky lg:top-28 h-fit">
+            <aside className="lg:sticky lg:top-28 h-fit space-y-6">
               <div className="p-7 rounded-2xl bg-gradient-to-br from-[#800024] to-[#C17A8E] text-white shadow-xl">
                 <h3 className="text-xl font-bold mb-3">Get started</h3>
                 <p className="text-white/90 text-sm mb-6">Talk to a specialist about your {service.title.toLowerCase()} needs.</p>
@@ -86,6 +86,7 @@ const ServiceDetail = () => {
                   </Button>
                 </div>
               </div>
+              <ServiceBookingForm serviceTitle={service.title} serviceSlug={service.slug} />
             </aside>
           </div>
 
