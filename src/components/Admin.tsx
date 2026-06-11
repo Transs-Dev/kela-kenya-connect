@@ -83,6 +83,7 @@ const Admin = () => {
       case "portfolio": return <AdminPortfolio />;
       case "testimonials": return <AdminTestimonials />;
       case "process": return <AdminProcess />;
+      case "audit": return <AdminAuditLog />;
       case "settings": return <AdminSettings />;
       default: return <AdminOverview />;
     }
