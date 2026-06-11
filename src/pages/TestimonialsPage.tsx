@@ -2,6 +2,8 @@ import { Star, MapPin } from 'lucide-react';
 import PageHero from '@/components/layout/PageHero';
 import CTASection from '@/components/CTASection';
 import SEO from '@/components/SEO';
+import TestimonialForm from '@/components/TestimonialForm';
+import { useTestimonials } from '@/hooks/useAdminData';
 
 const testimonials = [
   { name: 'Grace M.', location: 'London, UK', service: 'Property Management', date: 'April 2025', text: 'Kela made managing my Nairobi property overseas so much easier. Their attention to detail and prompt communication were truly impressive.', outcome: '12 months of seamless rent collection.' },
