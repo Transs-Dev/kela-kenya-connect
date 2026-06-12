@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, MessageCircle, Phone, ShieldCheck, Globe2, HeartHandshake, Sparkles, Star, MapPin } from 'lucide-react';
+import { ArrowRight, MessageCircle, Phone, ShieldCheck, Globe2, HeartHandshake, Sparkles, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SEO from '@/components/SEO';
 import ServiceCard from '@/components/ServiceCard';
@@ -8,6 +9,7 @@ import { SERVICES } from '@/data/services';
 import TestimonialForm from '@/components/TestimonialForm';
 import Testimonials from '@/components/Testimonials';
 import { openWhatsApp, callPhone, PHONE_DISPLAY } from '@/lib/contact';
+import { useSlides, useSiteSettings, useServicesMgmt } from '@/hooks/useAdminData';
 
 const stats = [
   { value: '500+', label: 'Clients served' },
