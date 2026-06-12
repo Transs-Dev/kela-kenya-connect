@@ -12,7 +12,7 @@ import { useServicesMgmt } from '@/hooks/useAdminData';
 const ServiceDetail = () => {
   const { slug } = useParams();
   const { data: cloudServices = [], isLoading } = useServicesMgmt();
-  const cloudMatch = cloudServices.find((s: any) => s.slug === slug && s.is_published);
+  const cloudMatch: any = cloudServices.find((s: any) => s.slug === slug && s.is_published);
   const hardService = getService(slug || '');
 
   if (!hardService && !cloudMatch) {
