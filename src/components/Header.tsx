@@ -3,6 +3,7 @@ import { Menu, X, Shield, Phone } from 'lucide-react';
 import { NavLink, Link } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 import { PHONE_NUMBER } from '@/lib/contact';
+import { useSiteSettings } from '@/hooks/useAdminData';
 
 const navItems = [
   { to: '/', label: 'Home', end: true },
@@ -18,6 +19,10 @@ const navItems = [
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { data: settings = {} } = useSiteSettings();
+  const branding = (settings as any).branding || {};
+  const logoUrl = branding.logoUrl || '/logo.jpeg';
+  const brandName = branding.brandName || 'Kela';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -46,8 +51,8 @@ const Header = () => {
         <div className="flex items-center justify-between gap-6">
           <Link to="/" className="flex items-center shrink-0">
             <img
-              src="/logo.jpeg"
-              alt="Kela — Kenyans Living Abroad"
+              src={logoUrl}
+              alt={`${brandName} — Kenyans Living Abroad`}
               className="w-20 h-14 rounded-lg object-cover"
             />
           </Link>

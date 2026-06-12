@@ -1,5 +1,5 @@
 import { useParams, Navigate, Link } from 'react-router-dom';
-import { CheckCircle2, ArrowRight, MessageCircle, Phone } from 'lucide-react';
+import { CheckCircle2, ArrowRight, MessageCircle, Phone, Sparkles } from 'lucide-react';
 import PageHero from '@/components/layout/PageHero';
 import CTASection from '@/components/CTASection';
 import SEO from '@/components/SEO';
@@ -7,11 +7,30 @@ import { Button } from '@/components/ui/button';
 import { SERVICES, getService } from '@/data/services';
 import ServiceBookingForm from '@/components/ServiceBookingForm';
 import { openWhatsApp, callPhone, PHONE_DISPLAY } from '@/lib/contact';
+import { useServicesMgmt } from '@/hooks/useAdminData';
 
 const ServiceDetail = () => {
   const { slug } = useParams();
-  const service = getService(slug || '');
-  if (!service) return <Navigate to="/services" replace />;
+  const { data: cloudServices = [], isLoading } = useServicesMgmt();
+  const cloudMatch: any = cloudServices.find((s: any) => s.slug === slug && s.is_published);
+  const hardService = getService(slug || '');
+
+  if (!hardService && !cloudMatch) {
+    if (isLoading) return <div className="py-32 text-center text-muted-foreground">Loading…</div>;
+    return <Navigate to="/services" replace />;
+  }
+
+  // Adapt cloud service to expected shape when no hardcoded match
+  const service = hardService || {
+    slug: cloudMatch.slug,
+    title: cloudMatch.title,
+    short: cloudMatch.description || '',
+    icon: Sparkles,
+    intro: cloudMatch.description || '',
+    benefits: [] as string[],
+    steps: [] as { title: string; description: string }[],
+    whatsappMessage: `Hi! I'd like to book ${cloudMatch.title}.`,
+  };
   const Icon = service.icon;
   const others = SERVICES.filter((s) => s.slug !== service.slug).slice(0, 3);
 
