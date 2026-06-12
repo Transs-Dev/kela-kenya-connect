@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,7 +10,7 @@ import { useProcessStages, useSiteSettings } from "@/hooks/useAdminData";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { logActivity } from "@/lib/adminApi";
+import { logActivity, uploadToStorage } from "@/lib/adminApi";
 
 export function AdminProcess() {
   const { data: stages = [] } = useProcessStages();
@@ -118,14 +118,45 @@ export function AdminSettings() {
     </Card>
   );
 
+  const uploadLogo = async (file: File) => {
+    try {
+      const url = await uploadToStorage(file, "branding");
+      const next = { ...branding, logoUrl: url };
+      setBranding(next);
+      await saveKey("branding", next);
+    } catch (e: any) {
+      toast({ title: "Logo upload failed", description: e.message, variant: "destructive" });
+    }
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
         <h2 className="text-2xl font-bold">Site Settings</h2>
         <p className="text-muted-foreground">Update content shown across the website — changes save to the cloud and reflect live.</p>
       </div>
+
+      {/* Logo upload */}
+      <Card className="border-none shadow-sm">
+        <CardContent className="p-6 space-y-3">
+          <h3 className="font-bold text-lg">Logo</h3>
+          <div className="flex items-center gap-4">
+            {branding.logoUrl ? (
+              <img src={branding.logoUrl} alt="Logo" className="w-20 h-20 object-cover rounded-lg border" />
+            ) : (
+              <div className="w-20 h-20 rounded-lg bg-muted flex items-center justify-center text-xs text-muted-foreground">No logo</div>
+            )}
+            <label className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer">
+              <Upload className="w-4 h-4" />Upload new logo
+              <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && uploadLogo(e.target.files[0])} />
+            </label>
+          </div>
+          <p className="text-xs text-muted-foreground">Uploaded to cloud storage and applied site-wide instantly.</p>
+        </CardContent>
+      </Card>
+
       <Section title="Contact" state={contact} setState={setContact} fields={["phone", "email", "whatsapp", "address"]} sectionKey="contact" />
-      <Section title="Branding" state={branding} setState={setBranding} fields={["brandName", "tagline"]} sectionKey="branding" />
+      <Section title="Branding" state={branding} setState={setBranding} fields={["brandName", "tagline", "logoUrl"]} sectionKey="branding" />
       <Section title="Homepage" state={homepage} setState={setHomepage} fields={["heroTitle", "heroSubtitle"]} sectionKey="homepage" />
       <Section title="Social Links" state={social} setState={setSocial} fields={["facebook", "instagram", "twitter", "linkedin"]} sectionKey="social" />
     </div>
