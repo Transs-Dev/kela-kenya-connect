@@ -166,9 +166,26 @@ const Index = () => {
             </h2>
             <p className="text-gray-600 dark:text-gray-300">Tap any service to see how we deliver it, end-to-end.</p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {SERVICES.map((s) => <ServiceCard key={s.slug} service={s} />)}
-          </div>
+          {publishedServices.length > 0 ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {publishedServices.map((s: any) => (
+                <Link key={s.id} to={`/services/${s.slug}`} className="group p-7 rounded-2xl border border-pink-100 dark:border-gray-700 hover:border-[#C17A8E] hover:shadow-lg transition-all bg-white dark:bg-gray-800">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#800024] to-[#C17A8E] flex items-center justify-center mb-4">
+                    <Sparkles className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">{s.title}</h3>
+                  <p className="text-sm text-muted-foreground line-clamp-3 mb-4">{s.description}</p>
+                  <span className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
+                    Book / Learn more <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {SERVICES.map((s) => <ServiceCard key={s.slug} service={s} />)}
+            </div>
+          )}
           <div className="text-center mt-10">
             <Button asChild variant="outline" className="border-2 border-[#800024] text-[#800024] hover:bg-[#800024] hover:text-white">
               <Link to="/services">View all services <ArrowRight className="ml-2 w-4 h-4" /></Link>
