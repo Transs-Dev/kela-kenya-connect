@@ -23,11 +23,11 @@ const Process = () => {
 
   return (
     <>
-      <SEO title="Our Process — Kela Assistance" description="A clear, transparent process from inquiry to handover." />
+      <SEO title="Our Process | Kela Link Ltd" description="A clear, transparent process from inquiry to handover." />
       <PageHero
         eyebrow="Process"
-        title="A simple, transparent process."
-        subtitle="From your first message to final handover — here's exactly how we work."
+        title="A Simple, Transparent Process."
+        subtitle="From your first message to final handover, here's exactly how we work."
         breadcrumb={[{ label: 'Home', to: '/' }, { label: 'Process' }]}
       />
 

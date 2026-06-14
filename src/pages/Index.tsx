@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, MessageCircle, Phone, ShieldCheck, Globe2, HeartHandshake, Sparkles, Star, MapPin } from 'lucide-react';
+import { ArrowRight, MessageCircle, Phone, ShieldCheck, Globe2, HeartHandshake, Link2, Star, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SEO from '@/components/SEO';
 import ServiceCard from '@/components/ServiceCard';
@@ -11,30 +11,35 @@ import Testimonials from '@/components/Testimonials';
 import { openWhatsApp, callPhone, PHONE_DISPLAY } from '@/lib/contact';
 import { useSlides, useSiteSettings, useServicesMgmt } from '@/hooks/useAdminData';
 
+const countries = [
+  { name: 'Kenya', flag: '🇰🇪' },
+  { name: 'United States', flag: '🇺🇸' },
+  { name: 'Canada', flag: '🇨🇦' },
+  { name: 'United Kingdom', flag: '🇬🇧' },
+  { name: 'United Arab Emirates', flag: '🇦🇪' },
+  { name: 'Australia', flag: '🇦🇺' },
+  { name: 'Norway', flag: '🇳🇴' },
+  { name: 'Germany', flag: '🇩🇪' },
+];
+
 const stats = [
   { value: '500+', label: 'Clients served' },
   { value: '5+', label: 'Years experience' },
-  { value: '15+', label: 'Countries reached' },
+  { value: '8', label: 'Countries served' },
   { value: '24/7', label: 'Support availability' },
 ];
 
 const whyUs = [
-  { icon: ShieldCheck, title: 'Trust & Transparency', text: 'Vetted team, clear pricing and reports you can rely on.' },
-  { icon: Globe2, title: 'Diaspora-First', text: 'Built by Kenyans abroad, for Kenyans abroad.' },
+  { icon: ShieldCheck, title: 'Trust and Transparency', text: 'Vetted team, clear pricing and reports you can rely on.' },
+  { icon: Globe2, title: 'Diaspora First', text: 'Built by Kenyans abroad, for Kenyans abroad.' },
   { icon: HeartHandshake, title: 'Personal Care', text: 'A dedicated point of contact who knows your story.' },
-  { icon: Sparkles, title: 'Local Expertise', text: 'Deep on-the-ground knowledge across Kenya.' },
+  { icon: Link2, title: 'Local Expertise', text: 'Deep on-the-ground knowledge across Kenya.' },
 ];
 
 const processPreview = [
   { n: '01', title: 'Reach out', desc: 'Tell us what you need via WhatsApp or call.' },
   { n: '02', title: 'We plan', desc: 'A clear proposal with scope, timeline and price.' },
   { n: '03', title: 'We deliver', desc: 'Execution with regular updates and proof.' },
-];
-
-const testimonials = [
-  { name: 'Grace M.', location: 'London, UK', text: 'Managing my Nairobi property from abroad finally feels effortless.' },
-  { name: 'Daniel K.', location: 'Toronto, Canada', text: 'They planned my entire Kenya trip — every detail was perfect.' },
-  { name: 'Sarah N.', location: 'Dallas, USA', text: 'Their daily errands support helps me care for my mom from far.' },
 ];
 
 const Index = () => {
@@ -46,7 +51,7 @@ const Index = () => {
   const homepage = (settings as any).homepage || {};
   const branding = (settings as any).branding || {};
   const heroTitle = homepage.heroTitle || 'Simplifying Life Across Borders';
-  const heroSubtitle = homepage.heroSubtitle || 'Kela empowers Kenyans abroad with trusted property, construction, travel and daily assistance services — back home, handled with care.';
+  const heroSubtitle = homepage.heroSubtitle || 'Kela Link Ltd empowers Kenyans abroad with trusted property, construction, travel and daily assistance services back home, handled with care.';
 
   const [slideIdx, setSlideIdx] = useState(0);
   useEffect(() => {
@@ -55,13 +60,13 @@ const Index = () => {
     return () => clearInterval(t);
   }, [activeSlides.length]);
 
-  const heroImage = activeSlides.length === 0 ? (branding.logoUrl || '/portfolio2.jpeg') : null;
+  const heroImage = activeSlides.length === 0 ? (branding.heroImage || '/portfolio2.jpeg') : null;
 
   return (
     <>
       <SEO
-        title="Kela — Simplifying Life Across Borders for Kenyans Abroad"
-        description="Property management, construction, travel planning and daily assistance in Kenya — trusted by the diaspora worldwide."
+        title="Kela Link Ltd | Virtual Assistance for Kenyans Living Abroad"
+        description="Property management, construction, travel planning and daily assistance in Kenya, trusted by the Kenyan diaspora worldwide."
       />
 
       {/* Hero with dynamic slideshow */}
@@ -87,7 +92,7 @@ const Index = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in">
               <span className={`inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-semibold px-3 py-1 rounded-full mb-5 ${activeSlides.length > 0 ? 'bg-white/15 text-white backdrop-blur' : 'bg-[#800024]/10 text-[#800024]'}`}>
-                <Sparkles className="w-3 h-3" /> Kenyans Living Abroad
+                <Link2 className="w-3 h-3" /> Kenyans Living Abroad
               </span>
               <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-tight ${activeSlides.length > 0 ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
                 {heroTitle}
@@ -113,18 +118,7 @@ const Index = () => {
             {activeSlides.length === 0 && heroImage && (
               <div className="relative">
                 <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl">
-                  <img src={heroImage} alt="Kela services in Kenya" className="w-full h-[420px] md:h-[520px] object-cover" />
-                </div>
-                <div className="absolute -bottom-6 -left-6 bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-5 flex items-center gap-3 z-20">
-                  <div className="flex -space-x-2">
-                    {[1,2,3].map((i) => (
-                      <div key={i} className="w-9 h-9 rounded-full bg-gradient-to-br from-[#800024] to-[#C17A8E] border-2 border-white" />
-                    ))}
-                  </div>
-                  <div>
-                    <div className="flex text-yellow-400">{[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-current" />)}</div>
-                    <p className="text-xs text-gray-600 dark:text-gray-300">Trusted by 500+ clients</p>
-                  </div>
+                  <img src={heroImage} alt="Kela Link Ltd services in Kenya" className="w-full h-[420px] md:h-[520px] object-cover" />
                 </div>
                 <div className="absolute -top-6 -right-6 w-32 h-32 bg-[#C17A8E]/30 rounded-full blur-2xl" />
               </div>
@@ -162,21 +156,21 @@ const Index = () => {
           <div className="text-center max-w-2xl mx-auto mb-14">
             <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#800024]">What we do</span>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-3 mb-4">
-              Services built for the diaspora
+              Services Built for the Diaspora
             </h2>
-            <p className="text-gray-600 dark:text-gray-300">Tap any service to see how we deliver it, end-to-end.</p>
+            <p className="text-gray-600 dark:text-gray-300">Tap any service to see how we deliver it, end to end.</p>
           </div>
           {publishedServices.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {publishedServices.map((s: any) => (
                 <Link key={s.id} to={`/services/${s.slug}`} className="group p-7 rounded-2xl border border-pink-100 dark:border-gray-700 hover:border-[#C17A8E] hover:shadow-lg transition-all bg-white dark:bg-gray-800">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#800024] to-[#C17A8E] flex items-center justify-center mb-4">
-                    <Sparkles className="w-6 h-6 text-white" />
+                    <Link2 className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">{s.title}</h3>
                   <p className="text-sm text-muted-foreground line-clamp-3 mb-4">{s.description}</p>
                   <span className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
-                    Book / Learn more <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    Book or Learn more <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </Link>
               ))}
@@ -198,8 +192,8 @@ const Index = () => {
       <section className="py-20 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#800024]">Why Kela</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-3 mb-4">Built on trust, run with care</h2>
+            <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#800024]">Why Kela Link</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-3 mb-4">Built on Trust, Run with Care</h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {whyUs.map((w) => {
@@ -218,16 +212,35 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Process preview */}
+      {/* Global Presence */}
       <section className="py-20 bg-gray-50 dark:bg-gray-950">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#800024]">Global Presence</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-3 mb-4">Serving Kenyans Across the World</h2>
+            <p className="text-gray-600 dark:text-gray-300">Real clients, real outcomes, in the countries where the diaspora calls home.</p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
+            {countries.map((c) => (
+              <div key={c.name} className="flex items-center gap-3 p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:border-[#C17A8E] transition-colors">
+                <span className="text-3xl" aria-hidden="true">{c.flag}</span>
+                <span className="font-semibold text-gray-900 dark:text-white text-sm">{c.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process preview */}
+      <section className="py-20 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#800024]">How it works</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-3 mb-4">A simple, transparent process</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-3 mb-4">A Simple, Transparent Process</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {processPreview.map((p) => (
-              <div key={p.n} className="relative bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm">
+              <div key={p.n} className="relative bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 shadow-sm">
                 <div className="text-5xl font-bold text-[#C17A8E]/40 mb-3">{p.n}</div>
                 <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">{p.title}</h3>
                 <p className="text-gray-600 dark:text-gray-300 text-sm">{p.desc}</p>
@@ -242,38 +255,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials preview */}
-      <section className="py-20 bg-white dark:bg-gray-900">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#800024]">Client stories</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-3 mb-4">Loved by clients worldwide</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {testimonials.map((t) => (
-              <div key={t.name} className="p-7 rounded-2xl bg-gradient-to-br from-pink-50 to-white dark:from-gray-800 dark:to-gray-800 border border-pink-100 dark:border-gray-700">
-                <div className="flex text-yellow-400 mb-3">{[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}</div>
-                <p className="text-gray-700 dark:text-gray-200 italic mb-5 leading-relaxed">"{t.text}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#800024] text-white flex items-center justify-center font-bold">
-                    {t.name.charAt(0)}
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900 dark:text-white">{t.name}</div>
-                    <div className="text-xs text-gray-500 flex items-center gap-1"><MapPin className="w-3 h-3" /> {t.location}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Button asChild variant="outline" className="border-2 border-[#800024] text-[#800024] hover:bg-[#800024] hover:text-white">
-              <Link to="/testimonials">Read more stories <ArrowRight className="ml-2 w-4 h-4" /></Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
+      {/* Real Client Stories (from cloud, approved only) */}
       <Testimonials />
       <TestimonialForm />
       <CTASection />

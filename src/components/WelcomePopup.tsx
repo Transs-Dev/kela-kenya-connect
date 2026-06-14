@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, Sparkles } from "lucide-react";
+import { X, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -34,11 +34,11 @@ const WelcomePopup = () => {
         </button>
         <div className="text-center">
           <div className="w-16 h-16 bg-gradient-to-br from-[#800024] to-[#C17A8E] rounded-full flex items-center justify-center mx-auto mb-5">
-            <Sparkles className="w-8 h-8 text-white" />
+            <Link2 className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-2xl font-bold mb-3">Karibu to Kela!</h2>
+          <h2 className="text-2xl font-bold mb-3">Karibu to Kela Link Ltd</h2>
           <p className="text-muted-foreground mb-6 leading-relaxed">
-            Your trusted partner across borders. Property, travel and daily assistance — handled in Kenya, for the diaspora.
+            Your trusted partner across borders. Property, travel and daily assistance handled in Kenya, for the diaspora.
           </p>
           <div className="space-y-3">
             <Link to="/services" onClick={handleClose}>

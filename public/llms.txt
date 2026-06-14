@@ -1,0 +1,15 @@
+# Kela Link Ltd
+
+> Virtual assistance, property management, travel and daily errand services in Kenya for Kenyans living abroad.
+
+Kela Link Ltd (Kela Assistance Services) supports the Kenyan diaspora by handling on-the-ground services in Kenya: property management, construction supervision, travel planning, daily errands and custom-tailored assistance. Serving clients across the US, Canada, UK, UAE, Australia, Norway and Germany.
+
+## Pages
+- [Home](/): Brand overview and featured services
+- [Our Story](/about): Mission, vision and values
+- [Services](/services): Full catalog of services
+- [Process](/process): How we deliver, from inquiry to handover
+- [Portfolio](/portfolio): Recent projects
+- [Client Stories](/testimonials): Real testimonials from the diaspora
+- [FAQ](/faq): Common questions
+- [Contact](/contact): Phone, WhatsApp, email and contact form

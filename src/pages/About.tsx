@@ -6,13 +6,13 @@ import SEO from '@/components/SEO';
 const values = [
   { icon: ShieldCheck, title: 'Trust', text: 'Every assignment is handled by vetted, accountable people.' },
   { icon: Heart, title: 'Care', text: 'We treat your family, property and time as our own.' },
-  { icon: Eye, title: 'Transparency', text: 'Clear scopes, fair pricing, honest reporting — always.' },
+  { icon: Eye, title: 'Transparency', text: 'Clear scopes, fair pricing, honest reporting, always.' },
   { icon: Award, title: 'Reliability', text: 'When we commit, we deliver. On time. Every time.' },
 ];
 
 const points = [
   { icon: Heart, title: 'Born from Personal Experience', text: 'Founded by Kenyans who lived the diaspora struggle firsthand.' },
-  { icon: Globe, title: 'Global Reach, Local Expertise', text: 'Serving 15+ countries with deep, on-the-ground Kenyan knowledge.' },
+  { icon: Globe, title: 'Global Reach, Local Expertise', text: 'Serving the US, Canada, UK, UAE, Australia, Norway and Germany with deep, on-the-ground Kenyan knowledge.' },
   { icon: Users, title: 'Trusted Network', text: 'Verified partners and professionals across the country.' },
   { icon: Award, title: 'Proven Track Record', text: 'Hundreds of successful engagements and counting.' },
 ];
@@ -20,11 +20,11 @@ const points = [
 const About = () => {
   return (
     <>
-      <SEO title="Our Story — Kela Assistance" description="How Kela was born from real diaspora challenges, our mission, vision and values." />
+      <SEO title="Our Story | Kela Link Ltd" description="How Kela Link Ltd was born from real diaspora challenges, our mission, vision and values." />
       <PageHero
         eyebrow="Our Story"
-        title="Born from the diaspora, built for the diaspora."
-        subtitle="Kela exists because we lived the problem — managing life back home from thousands of miles away."
+        title="Born from the Diaspora, Built for the Diaspora."
+        subtitle="Kela Link Ltd exists because we lived the problem of managing life back home from thousands of miles away."
         breadcrumb={[{ label: 'Home', to: '/' }, { label: 'Our Story' }]}
       />
 
@@ -32,9 +32,9 @@ const About = () => {
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="space-y-6 text-lg text-gray-700 dark:text-gray-200 leading-relaxed">
             <p>
-              Kela Assistance Services was born from a simple yet profound understanding: Kenyans
+              Kela Link Ltd was born from a simple yet profound understanding: Kenyans
               living abroad shouldn't have to worry about managing their affairs back home. Our
-              founders — themselves part of the Kenyan diaspora — felt the daily anxiety of being
+              founders, themselves part of the Kenyan diaspora, felt the daily anxiety of being
               thousands of miles away while needing to handle property, family and business in
               Kenya.
             </p>
@@ -56,7 +56,7 @@ const About = () => {
             <Target className="w-8 h-8 text-[#800024] mb-4" />
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">Our Mission</h2>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-              To simplify life across borders for Kenyans abroad — by being the trusted partner who
+              To simplify life across borders for Kenyans abroad by being the trusted partner who
               shows up, on the ground, with care and excellence.
             </p>
           </div>
@@ -64,7 +64,7 @@ const About = () => {
             <Eye className="w-8 h-8 text-[#800024] mb-4" />
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">Our Vision</h2>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-              A connected diaspora that never feels far from home — empowered with reliable
+              A connected diaspora that never feels far from home, empowered with reliable
               services that make managing life in Kenya effortless.
             </p>
           </div>
