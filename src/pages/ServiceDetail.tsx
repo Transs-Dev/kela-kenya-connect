@@ -1,5 +1,5 @@
 import { useParams, Navigate, Link } from 'react-router-dom';
-import { CheckCircle2, ArrowRight, MessageCircle, Phone, Sparkles } from 'lucide-react';
+import { CheckCircle2, ArrowRight, MessageCircle, Phone, Link2 } from 'lucide-react';
 import PageHero from '@/components/layout/PageHero';
 import CTASection from '@/components/CTASection';
 import SEO from '@/components/SEO';
@@ -25,7 +25,7 @@ const ServiceDetail = () => {
     slug: cloudMatch.slug,
     title: cloudMatch.title,
     short: cloudMatch.description || '',
-    icon: Sparkles,
+    icon: Link2,
     intro: cloudMatch.description || '',
     benefits: [] as string[],
     steps: [] as { title: string; description: string }[],
