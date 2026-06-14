@@ -10,7 +10,7 @@ interface CTASectionProps {
 
 const CTASection = ({
   title = 'Ready to make life easier?',
-  subtitle = 'Talk to a Kela specialist today — we usually reply within an hour.',
+  subtitle = 'Talk to a Kela specialist today we usually reply within an hour.',
   message,
 }: CTASectionProps) => {
   return (
