@@ -36,7 +36,7 @@ const ServiceDetail = () => {
 
   return (
     <>
-      <SEO title={`${service.title} — Kela Assistance`} description={service.short} />
+      <SEO title={`${service.title} | Kela Link Ltd`} description={service.short} />
       <PageHero
         eyebrow="Service"
         title={service.title}

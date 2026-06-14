@@ -5,10 +5,10 @@ import FAQ from '@/components/FAQ';
 
 const FAQPage = () => (
   <>
-    <SEO title="FAQ — Kela Assistance" description="Answers to common questions about Kela's services." />
+    <SEO title="FAQ | Kela Link Ltd" description="Answers to common questions about Kela Link Ltd services." />
     <PageHero
       eyebrow="FAQ"
-      title="Frequently asked questions."
+      title="Frequently Asked Questions."
       subtitle="Everything you need to know before getting started."
       breadcrumb={[{ label: 'Home', to: '/' }, { label: 'FAQ' }]}
     />
