@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Sparkles, X } from "lucide-react";
+import { Link2 as Sparkles, X } from "lucide-react";
 
 export function WelcomeBanner() {
   const [visible, setVisible] = useState(true);

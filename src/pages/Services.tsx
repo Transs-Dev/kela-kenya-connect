@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Link2 } from 'lucide-react';
 import PageHero from '@/components/layout/PageHero';
 import ServiceCard from '@/components/ServiceCard';
 import CTASection from '@/components/CTASection';
@@ -13,13 +13,14 @@ const Services = () => {
 
   return (
     <>
-      <SEO title="Services — Kela Assistance" description="Property, construction, travel, daily tasks and tailored solutions for Kenyans abroad." />
+      <SEO title="Services | Kela Link Ltd" description="Property, construction, travel, daily tasks and tailored solutions for Kenyans abroad." />
       <PageHero
         eyebrow="Services"
-        title="Everything you need, handled in Kenya."
-        subtitle="From property to travel to daily errands — pick a service to see how we deliver it."
+        title="Everything You Need, Handled in Kenya."
+        subtitle="From property to travel to daily errands, pick a service to see how we deliver it."
         breadcrumb={[{ label: 'Home', to: '/' }, { label: 'Services' }]}
       />
+
       <section className="py-20 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           {isLoading ? (
@@ -33,12 +34,12 @@ const Services = () => {
                   className="group p-7 rounded-2xl border border-pink-100 dark:border-gray-700 hover:border-[#C17A8E] hover:shadow-lg transition-all bg-white dark:bg-gray-800"
                 >
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#800024] to-[#C17A8E] flex items-center justify-center mb-4">
-                    <Sparkles className="w-6 h-6 text-white" />
+                    <Link2 className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">{s.title}</h3>
                   <p className="text-sm text-muted-foreground line-clamp-3 mb-4">{s.description}</p>
                   <span className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
-                    Book / Learn more <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    Book or Learn more <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </Link>
               ))}

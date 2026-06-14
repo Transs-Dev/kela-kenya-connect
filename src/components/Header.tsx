@@ -22,7 +22,7 @@ const Header = () => {
   const { data: settings = {} } = useSiteSettings();
   const branding = (settings as any).branding || {};
   const logoUrl = branding.logoUrl || '/logo.jpeg';
-  const brandName = branding.brandName || 'Kela';
+  const brandName = branding.brandName || 'Kela Link Ltd';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -35,8 +35,6 @@ const Header = () => {
       isActive
         ? 'text-[#800024] dark:text-[#C17A8E]'
         : 'text-gray-700 dark:text-gray-300 hover:text-[#800024] dark:hover:text-[#C17A8E]'
-    } after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[2px] after:bg-[#800024] after:transition-transform after:origin-left ${
-      ''
     }`;
 
   return (
@@ -44,20 +42,24 @@ const Header = () => {
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         scrolled
           ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-sm'
-          : 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm'
+          : 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm'
       } border-b border-gray-100 dark:border-gray-800`}
     >
-      <div className="container mx-auto px-4 py-3">
+      <div className="container mx-auto px-4 py-2">
         <div className="flex items-center justify-between gap-6">
-          <Link to="/" className="flex items-center shrink-0">
+          <Link to="/" className="flex items-center gap-3 shrink-0" aria-label={`${brandName} home`}>
             <img
               src={logoUrl}
-              alt={`${brandName} — Kenyans Living Abroad`}
-              className="w-20 h-14 rounded-lg object-cover"
+              alt={`${brandName} logo`}
+              className="h-16 md:h-20 w-auto object-contain"
             />
+            <span className="hidden md:block leading-tight">
+              <span className="block font-extrabold text-lg text-[#800024] dark:text-[#C17A8E] tracking-tight">Kela Link Ltd</span>
+              <span className="block text-[10px] uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">Kenyans Living Abroad</span>
+            </span>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-7">
+          <nav className="hidden lg:flex items-center gap-7" aria-label="Primary">
             {navItems.map((n) => (
               <NavLink key={n.to} to={n.to} end={n.end} className={linkClass}>
                 {({ isActive }) => (
@@ -105,7 +107,7 @@ const Header = () => {
         </div>
 
         {isMenuOpen && (
-          <nav className="lg:hidden mt-4 pb-4 border-t border-gray-100 dark:border-gray-800 pt-4 flex flex-col gap-3">
+          <nav className="lg:hidden mt-4 pb-4 border-t border-gray-100 dark:border-gray-800 pt-4 flex flex-col gap-3" aria-label="Mobile">
             {navItems.map((n) => (
               <NavLink
                 key={n.to}
