@@ -8,11 +8,11 @@ const PortfolioPage = () => {
 
   return (
     <>
-      <SEO title="Portfolio — Kela Assistance" description="Recent projects delivered by Kela for clients in the diaspora." />
+      <SEO title="Portfolio | Kela Link Ltd" description="Recent projects delivered by Kela Link Ltd for clients in the diaspora." />
       <PageHero
         eyebrow="Portfolio"
-        title="Recent projects we've delivered."
-        subtitle="A glimpse of our work — from groundbreaking to handover."
+        title="Recent Projects We've Delivered."
+        subtitle="A glimpse of our work, from groundbreaking to handover."
         breadcrumb={[{ label: 'Home', to: '/' }, { label: 'Portfolio' }]}
       />
       <section className="py-20 bg-white dark:bg-gray-900">
