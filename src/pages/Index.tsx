@@ -1,25 +1,26 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, MessageCircle, Phone, ShieldCheck, Globe2, HeartHandshake, Link2, Star, MapPin } from 'lucide-react';
+import { ArrowRight, MessageCircle, Phone, ShieldCheck, Globe2, HeartHandshake, Link2, Headphones, Images as ImagesIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SEO from '@/components/SEO';
 import ServiceCard from '@/components/ServiceCard';
 import CTASection from '@/components/CTASection';
+import Lightbox from '@/components/Lightbox';
 import { SERVICES } from '@/data/services';
 import TestimonialForm from '@/components/TestimonialForm';
 import Testimonials from '@/components/Testimonials';
 import { openWhatsApp, callPhone, PHONE_DISPLAY } from '@/lib/contact';
-import { useSlides, useSiteSettings, useServicesMgmt } from '@/hooks/useAdminData';
+import { useSlides, useSiteSettings, useServicesMgmt, usePortfolio, useGallery, usePodcasts } from '@/hooks/useAdminData';
 
 const countries = [
-  { name: 'Kenya', flag: '🇰🇪' },
-  { name: 'United States', flag: '🇺🇸' },
-  { name: 'Canada', flag: '🇨🇦' },
-  { name: 'United Kingdom', flag: '🇬🇧' },
-  { name: 'United Arab Emirates', flag: '🇦🇪' },
-  { name: 'Australia', flag: '🇦🇺' },
-  { name: 'Norway', flag: '🇳🇴' },
-  { name: 'Germany', flag: '🇩🇪' },
+  { name: 'Kenya', code: 'ke' },
+  { name: 'United States', code: 'us' },
+  { name: 'Canada', code: 'ca' },
+  { name: 'United Kingdom', code: 'gb' },
+  { name: 'United Arab Emirates', code: 'ae' },
+  { name: 'Australia', code: 'au' },
+  { name: 'Norway', code: 'no' },
+  { name: 'Germany', code: 'de' },
 ];
 
 const stats = [
@@ -46,8 +47,19 @@ const Index = () => {
   const { data: slides = [] } = useSlides();
   const { data: settings = {} } = useSiteSettings();
   const { data: cloudServices = [] } = useServicesMgmt();
+  const { data: portfolio = [] } = usePortfolio();
+  const { data: gallery = [] } = useGallery();
+  const { data: podcasts = [] } = usePodcasts();
+
   const activeSlides = slides.filter((s: any) => s.is_active);
   const publishedServices = cloudServices.filter((s: any) => s.is_published);
+  const featuredPortfolio = portfolio.slice(0, 6);
+  const featuredGallery = (gallery.filter((g: any) => g.is_featured).length > 0
+    ? gallery.filter((g: any) => g.is_featured)
+    : gallery
+  ).slice(0, 5);
+  const publishedPodcasts = podcasts.filter((p: any) => p.is_published);
+
   const homepage = (settings as any).homepage || {};
   const branding = (settings as any).branding || {};
   const heroTitle = homepage.heroTitle || 'Simplifying Life Across Borders';
@@ -59,6 +71,13 @@ const Index = () => {
     const t = setInterval(() => setSlideIdx((i) => (i + 1) % activeSlides.length), 5000);
     return () => clearInterval(t);
   }, [activeSlides.length]);
+
+  const [lightIdx, setLightIdx] = useState<number | null>(null);
+  const galleryLb = featuredGallery.map((g: any) => ({ src: g.image_url, alt: g.title, title: g.title }));
+
+  const [portfolioLightIdx, setPortfolioLightIdx] = useState<number | null>(null);
+  const portfolioWithImg = featuredPortfolio.filter((p: any) => p.image_url);
+  const portfolioLb = portfolioWithImg.map((p: any) => ({ src: p.image_url, alt: p.title, title: p.title }));
 
   const heroImage = activeSlides.length === 0 ? (branding.heroImage || '/portfolio2.jpeg') : null;
 
@@ -100,14 +119,19 @@ const Index = () => {
               <p className={`text-lg md:text-xl mb-8 leading-relaxed max-w-xl ${activeSlides.length > 0 ? 'text-white/90' : 'text-gray-600 dark:text-gray-300'}`}>
                 {heroSubtitle}
               </p>
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex flex-wrap gap-3">
                 <Button asChild size="lg" className="bg-[#800024] hover:bg-[#6a001d] text-white px-7 py-6 text-base font-semibold shadow-lg">
                   <Link to="/services">
                     Explore Services <ArrowRight className="ml-2 w-5 h-5" />
                   </Link>
                 </Button>
-                <Button onClick={() => openWhatsApp()} size="lg" variant="outline" className={`border-2 px-7 py-6 text-base font-semibold ${activeSlides.length > 0 ? 'border-white text-white bg-white/10 hover:bg-white hover:text-[#800024] backdrop-blur' : 'border-[#800024] text-[#800024] hover:bg-[#800024] hover:text-white'}`}>
-                  <MessageCircle className="mr-2 w-5 h-5" /> Chat on WhatsApp
+                <Button asChild size="lg" variant="outline" className={`border-2 px-7 py-6 text-base font-semibold ${activeSlides.length > 0 ? 'border-white text-white bg-white/10 hover:bg-white hover:text-[#800024] backdrop-blur' : 'border-[#800024] text-[#800024] hover:bg-[#800024] hover:text-white'}`}>
+                  <Link to="/portfolio">
+                    <ImagesIcon className="mr-2 w-5 h-5" /> View Portfolio
+                  </Link>
+                </Button>
+                <Button onClick={() => openWhatsApp()} size="lg" variant="ghost" className={`px-5 py-6 text-base font-semibold ${activeSlides.length > 0 ? 'text-white hover:bg-white/10' : 'text-[#800024] hover:bg-[#800024]/5'}`}>
+                  <MessageCircle className="mr-2 w-5 h-5" /> WhatsApp
                 </Button>
                 <Button onClick={callPhone} size="lg" variant="ghost" className={`px-5 py-6 text-base font-semibold ${activeSlides.length > 0 ? 'text-white hover:bg-white/10' : 'text-[#800024] hover:bg-[#800024]/5'}`}>
                   <Phone className="mr-2 w-5 h-5" /> {PHONE_DISPLAY}
@@ -134,7 +158,6 @@ const Index = () => {
           </div>
         )}
       </section>
-
 
       {/* Stats */}
       <section className="py-12 bg-white dark:bg-gray-900 border-y border-gray-100 dark:border-gray-800">
@@ -188,8 +211,47 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Featured Portfolio */}
+      {featuredPortfolio.length > 0 && (
+        <section className="py-20 bg-white dark:bg-gray-900">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-2xl mx-auto mb-12">
+              <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#800024]">Featured Portfolio</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-3 mb-4">Selected Work, Delivered with Care</h2>
+              <p className="text-gray-600 dark:text-gray-300">A taste of recent projects. Click any image to view it up close.</p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5 max-w-6xl mx-auto">
+              {featuredPortfolio.map((p: any) => {
+                const i = portfolioWithImg.findIndex((x: any) => x.id === p.id);
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => p.image_url && i >= 0 && setPortfolioLightIdx(i)}
+                    className="group relative aspect-[4/3] overflow-hidden rounded-2xl bg-muted text-left cursor-zoom-in"
+                  >
+                    {p.image_url ? (
+                      <img src={p.image_url} alt={p.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    ) : null}
+                    <div className="absolute inset-x-0 bottom-0 p-3 md:p-4 bg-gradient-to-t from-black/80 via-black/30 to-transparent">
+                      {p.category && <span className="text-[10px] md:text-xs uppercase tracking-wider font-semibold text-[#C17A8E]">{p.category}</span>}
+                      <h3 className="text-white font-bold text-sm md:text-base line-clamp-1">{p.title}</h3>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="text-center mt-10 flex flex-wrap gap-3 justify-center">
+              <Button asChild size="lg" className="bg-[#800024] hover:bg-[#6a001d] text-white font-semibold">
+                <Link to="/portfolio">See Full Portfolio <ArrowRight className="ml-2 w-4 h-4" /></Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Why Choose Us */}
-      <section className="py-20 bg-white dark:bg-gray-900">
+      <section className="py-20 bg-gray-50 dark:bg-gray-950">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#800024]">Why Kela Link</span>
@@ -212,24 +274,101 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Global Presence */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-950">
+      {/* Global Presence — flag images for cross-device reliability */}
+      <section className="py-20 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#800024]">Global Presence</span>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-3 mb-4">Serving Kenyans Across the World</h2>
             <p className="text-gray-600 dark:text-gray-300">Real clients, real outcomes, in the countries where the diaspora calls home.</p>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 max-w-5xl mx-auto">
             {countries.map((c) => (
-              <div key={c.name} className="flex items-center gap-3 p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:border-[#C17A8E] transition-colors">
-                <span className="text-3xl" aria-hidden="true">{c.flag}</span>
-                <span className="font-semibold text-gray-900 dark:text-white text-sm">{c.name}</span>
+              <div key={c.name} className="flex items-center gap-3 p-3 md:p-4 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:border-[#C17A8E] transition-colors">
+                <img
+                  src={`https://flagcdn.com/w80/${c.code}.png`}
+                  srcSet={`https://flagcdn.com/w160/${c.code}.png 2x`}
+                  width={40}
+                  height={28}
+                  alt={`${c.name} flag`}
+                  loading="lazy"
+                  className="w-10 h-7 object-cover rounded-sm shadow-sm shrink-0"
+                />
+                <span className="font-semibold text-gray-900 dark:text-white text-xs md:text-sm">{c.name}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
+
+      {/* Gallery preview */}
+      {featuredGallery.length > 0 && (
+        <section className="py-20 bg-gray-50 dark:bg-gray-950">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-2xl mx-auto mb-12">
+              <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#800024]">Gallery</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-3 mb-4">Moments From Our Work</h2>
+              <p className="text-gray-600 dark:text-gray-300">A small look at the people and places we serve every day.</p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 max-w-6xl mx-auto">
+              {featuredGallery.map((g: any, i: number) => (
+                <button
+                  key={g.id}
+                  onClick={() => setLightIdx(i)}
+                  className={`group relative aspect-square overflow-hidden rounded-xl cursor-zoom-in bg-muted ${i === 0 ? 'col-span-2 row-span-2 md:row-span-1 md:col-span-2 aspect-[4/3] md:aspect-square' : ''}`}
+                  aria-label={`Open gallery photo ${i + 1}`}
+                >
+                  <img src={g.image_url} alt={g.title || ''} loading="lazy" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors" />
+                </button>
+              ))}
+            </div>
+            <div className="text-center mt-10">
+              <Button asChild className="bg-[#800024] hover:bg-[#6a001d] text-white font-semibold">
+                <Link to="/gallery">View more photos <ArrowRight className="ml-2 w-4 h-4" /></Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Listen — podcasts */}
+      {publishedPodcasts.length > 0 && (
+        <section id="listen" className="py-20 bg-gradient-to-br from-[#800024]/5 via-white to-[#C17A8E]/10 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-2xl mx-auto mb-12">
+              <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-semibold text-[#800024]">
+                <Headphones className="w-4 h-4" /> Podcast
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-3 mb-4">
+                Listen to Our Live Talks with Clients
+              </h2>
+              <p className="text-gray-600 dark:text-gray-300">Real conversations, real diaspora stories. Press play on any episode below.</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-5 max-w-5xl mx-auto">
+              {publishedPodcasts.slice(0, 4).map((p: any) => (
+                <article key={p.id} className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700 shadow-sm">
+                  <div className="flex items-start gap-4 mb-3">
+                    {p.cover_url ? (
+                      <img src={p.cover_url} alt="" className="w-20 h-20 rounded-xl object-cover shrink-0" />
+                    ) : (
+                      <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-[#800024] to-[#C17A8E] flex items-center justify-center shrink-0">
+                        <Headphones className="w-8 h-8 text-white" />
+                      </div>
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-bold text-gray-900 dark:text-white line-clamp-2">{p.title}</h3>
+                      {p.description && <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{p.description}</p>}
+                    </div>
+                  </div>
+                  <audio src={p.audio_url} controls preload="none" className="w-full" />
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Process preview */}
       <section className="py-20 bg-white dark:bg-gray-900">
@@ -259,6 +398,9 @@ const Index = () => {
       <Testimonials />
       <TestimonialForm />
       <CTASection />
+
+      {lightIdx !== null && <Lightbox images={galleryLb} index={lightIdx} onClose={() => setLightIdx(null)} onIndexChange={setLightIdx} />}
+      {portfolioLightIdx !== null && <Lightbox images={portfolioLb} index={portfolioLightIdx} onClose={() => setPortfolioLightIdx(null)} onIndexChange={setPortfolioLightIdx} />}
     </>
   );
 };
