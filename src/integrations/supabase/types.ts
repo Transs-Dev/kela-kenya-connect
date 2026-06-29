@@ -107,6 +107,33 @@ export type Database = {
         }
         Relationships: []
       }
+      gallery_items: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          is_featured: boolean
+          sort_order: number
+          title: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          is_featured?: boolean
+          sort_order?: number
+          title?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          is_featured?: boolean
+          sort_order?: number
+          title?: string | null
+        }
+        Relationships: []
+      }
       homepage_slides: {
         Row: {
           caption: string | null
@@ -164,6 +191,45 @@ export type Database = {
           sender_name?: string
           status?: string
           subject?: string | null
+        }
+        Relationships: []
+      }
+      podcasts: {
+        Row: {
+          audio_url: string
+          cover_url: string | null
+          created_at: string
+          description: string | null
+          duration_seconds: number | null
+          id: string
+          is_published: boolean
+          published_at: string | null
+          sort_order: number
+          title: string
+        }
+        Insert: {
+          audio_url: string
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          duration_seconds?: number | null
+          id?: string
+          is_published?: boolean
+          published_at?: string | null
+          sort_order?: number
+          title: string
+        }
+        Update: {
+          audio_url?: string
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          duration_seconds?: number | null
+          id?: string
+          is_published?: boolean
+          published_at?: string | null
+          sort_order?: number
+          title?: string
         }
         Relationships: []
       }

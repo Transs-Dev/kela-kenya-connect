@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Shield, Phone } from 'lucide-react';
+import { Menu, X, Phone } from 'lucide-react';
 import { NavLink, Link } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 import { PHONE_NUMBER } from '@/lib/contact';
@@ -11,10 +11,12 @@ const navItems = [
   { to: '/services', label: 'Services' },
   { to: '/process', label: 'Process' },
   { to: '/portfolio', label: 'Portfolio' },
+  { to: '/gallery', label: 'Gallery' },
   { to: '/testimonials', label: 'Stories' },
   { to: '/faq', label: 'FAQ' },
   { to: '/contact', label: 'Contact' },
 ];
+
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -78,14 +80,6 @@ const Header = () => {
 
           <div className="hidden lg:flex items-center gap-3">
             <ThemeToggle />
-            <Link
-              to="/admin"
-              className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-[#800024] text-sm"
-              aria-label="Admin"
-            >
-              <Shield className="w-4 h-4" />
-              <span>Admin</span>
-            </Link>
             <a
               href={`tel:${PHONE_NUMBER}`}
               className="inline-flex items-center gap-2 bg-[#800024] hover:bg-[#6a001d] text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm"
@@ -93,6 +87,7 @@ const Header = () => {
               <Phone className="w-4 h-4" /> Call us
             </a>
           </div>
+
 
           <div className="lg:hidden flex items-center gap-2">
             <ThemeToggle />
@@ -125,19 +120,13 @@ const Header = () => {
                 {n.label}
               </NavLink>
             ))}
-            <Link
-              to="/admin"
-              onClick={() => setIsMenuOpen(false)}
-              className="flex items-center gap-2 text-gray-700 dark:text-gray-300"
-            >
-              <Shield className="w-4 h-4" /> Admin
-            </Link>
             <a
               href={`tel:${PHONE_NUMBER}`}
               className="inline-flex items-center justify-center gap-2 bg-[#800024] text-white px-4 py-2 rounded-lg font-semibold mt-2"
             >
               <Phone className="w-4 h-4" /> Call us
             </a>
+
           </nav>
         )}
       </div>

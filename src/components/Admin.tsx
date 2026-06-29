@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AdminSidebar } from "./admin/AdminSidebar";
 import { AdminOverview } from "./admin/AdminOverview";
@@ -11,11 +11,14 @@ import { AdminTestimonials } from "./admin/AdminTestimonials";
 import { AdminProcess, AdminSettings } from "./admin/AdminProcessSettings";
 import { AdminHomepageSlides } from "./admin/AdminHomepageSlides";
 import { AdminAuditLog } from "./admin/AdminAuditLog";
+import { AdminGallery } from "./admin/AdminGallery";
+import { AdminPodcasts } from "./admin/AdminPodcasts";
 import { WelcomeBanner } from "./admin/WelcomeBanner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Lock, LayoutDashboard } from "lucide-react";
+import { useSiteSettings } from "@/hooks/useAdminData";
 
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -23,11 +26,12 @@ const Admin = () => {
   const [showPin, setShowPin] = useState(false);
   const [activeSection, setActiveSection] = useState("overview");
   const { toast } = useToast();
-  const correctPin = "1200";
+  const { data: settings = {} } = useSiteSettings();
+  const storedPin = (settings as any)?.admin?.pin || "1200";
 
   const handlePinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (pin === correctPin) {
+    if (pin === storedPin) {
       setIsAuthenticated(true);
       toast({ title: "Access Granted", description: "Welcome to the admin dashboard." });
     } else {
@@ -51,20 +55,20 @@ const Admin = () => {
               <Lock className="w-8 h-8 text-primary-foreground" />
             </div>
             <h1 className="text-3xl font-bold mb-2">Operations Portal</h1>
-            <p className="text-muted-foreground">Secure access for Kela Assistance administrators</p>
+            <p className="text-muted-foreground">Secure access for Kela Link administrators</p>
           </div>
           <div className="bg-card rounded-3xl shadow-xl p-8 border">
             <form onSubmit={handlePinSubmit} className="space-y-6">
               <div className="space-y-2">
                 <label className="text-sm font-semibold ml-1">Enter Admin PIN</label>
                 <div className="relative">
-                  <Input type={showPin ? "text" : "password"} value={pin} onChange={(e) => setPin(e.target.value)} placeholder="••••" className="h-14 text-2xl tracking-[1em] text-center font-bold" maxLength={4} />
+                  <Input type={showPin ? "text" : "password"} value={pin} onChange={(e) => setPin(e.target.value)} placeholder="••••" className="h-14 text-2xl tracking-[1em] text-center font-bold" maxLength={8} />
                   <button type="button" onClick={() => setShowPin(!showPin)} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground">
                     {showPin ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
                 </div>
               </div>
-              <Button type="submit" className="w-full h-14 text-lg font-bold" disabled={pin.length !== 4}>Unlock Dashboard</Button>
+              <Button type="submit" className="w-full h-14 text-lg font-bold" disabled={pin.length < 4}>Unlock Dashboard</Button>
             </form>
           </div>
         </div>
@@ -76,6 +80,8 @@ const Admin = () => {
     switch (activeSection) {
       case "overview": return <AdminOverview />;
       case "homepage": return <AdminHomepageSlides />;
+      case "gallery": return <AdminGallery />;
+      case "podcasts": return <AdminPodcasts />;
       case "clients": return <AdminClients />;
       case "requests": return <AdminRequests />;
       case "messages": return <AdminMessages />;

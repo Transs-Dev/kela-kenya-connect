@@ -160,6 +160,29 @@ export const useSlides = () =>
   });
 
 /**
+ * GALLERY ITEMS
+ */
+export const useGallery = () => {
+  useRealtime("gallery_items", ["gallery"]);
+  return useQuery({
+    queryKey: ["gallery"],
+    queryFn: () => list("gallery_items", "sort_order", true),
+  });
+};
+
+/**
+ * PODCASTS
+ */
+export const usePodcasts = () => {
+  useRealtime("podcasts", ["podcasts"]);
+  return useQuery({
+    queryKey: ["podcasts"],
+    queryFn: () => list("podcasts", "sort_order", true),
+  });
+};
+
+
+/**
  * ADMIN STATS
  */
 export const useAdminStats = () => {

@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, MessageSquare, Settings, Briefcase, Star, FileText, Clock, LogOut, ChevronRight, Image, Activity } from "lucide-react";
+import { LayoutDashboard, Users, MessageSquare, Settings, Briefcase, Star, FileText, Clock, LogOut, ChevronRight, Image, Activity, Images, Mic } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarGroup, SidebarGroupLabel, SidebarGroupContent } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 
@@ -7,6 +7,8 @@ interface Props { activeSection: string; onSectionChange: (s: string) => void; o
 const menuItems = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
   { id: "homepage", label: "Homepage Slides", icon: Image },
+  { id: "gallery", label: "Gallery", icon: Images },
+  { id: "podcasts", label: "Podcasts", icon: Mic },
   { id: "clients", label: "Clients", icon: Users },
   { id: "requests", label: "Service Requests", icon: Clock },
   { id: "messages", label: "Messages", icon: MessageSquare },
