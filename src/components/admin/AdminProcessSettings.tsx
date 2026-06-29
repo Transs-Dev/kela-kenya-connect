@@ -87,6 +87,9 @@ export function AdminSettings() {
   const [branding, setBranding] = useState<any>({});
   const [homepage, setHomepage] = useState<any>({});
   const [social, setSocial] = useState<any>({});
+  const [pinCurrent, setPinCurrent] = useState("");
+  const [pinNew, setPinNew] = useState("");
+  const [pinConfirm, setPinConfirm] = useState("");
 
   useEffect(() => {
     setContact(settings.contact ?? {});
@@ -129,6 +132,16 @@ export function AdminSettings() {
     }
   };
 
+  const changePin = async () => {
+    const storedPin = (settings as any)?.admin?.pin || "1200";
+    if (pinCurrent !== storedPin) return toast({ title: "Current PIN incorrect", variant: "destructive" });
+    if (!/^\d{4,8}$/.test(pinNew)) return toast({ title: "New PIN must be 4 to 8 digits", variant: "destructive" });
+    if (pinNew !== pinConfirm) return toast({ title: "PINs do not match", variant: "destructive" });
+    await saveKey("admin", { ...(settings as any).admin, pin: pinNew });
+    setPinCurrent(""); setPinNew(""); setPinConfirm("");
+    toast({ title: "PIN updated. Use the new PIN next time you sign in." });
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
@@ -158,7 +171,29 @@ export function AdminSettings() {
       <Section title="Contact" state={contact} setState={setContact} fields={["phone", "email", "whatsapp", "address"]} sectionKey="contact" />
       <Section title="Branding" state={branding} setState={setBranding} fields={["brandName", "tagline", "logoUrl"]} sectionKey="branding" />
       <Section title="Homepage" state={homepage} setState={setHomepage} fields={["heroTitle", "heroSubtitle"]} sectionKey="homepage" />
-      <Section title="Social Links" state={social} setState={setSocial} fields={["facebook", "instagram", "twitter", "linkedin"]} sectionKey="social" />
+      <Section title="Social Links" state={social} setState={setSocial} fields={["facebook", "instagram", "youtube", "tiktok", "linkedin"]} sectionKey="social" />
+
+      {/* PIN change */}
+      <Card className="border-none shadow-sm">
+        <CardContent className="p-6 space-y-3">
+          <h3 className="font-bold text-lg">Change Admin PIN</h3>
+          <p className="text-xs text-muted-foreground">Pick a 4-8 digit PIN. Stored securely in cloud settings.</p>
+          <div>
+            <label className="text-xs text-muted-foreground">Current PIN</label>
+            <Input type="password" value={pinCurrent} onChange={(e) => setPinCurrent(e.target.value)} maxLength={8} />
+          </div>
+          <div>
+            <label className="text-xs text-muted-foreground">New PIN</label>
+            <Input type="password" value={pinNew} onChange={(e) => setPinNew(e.target.value)} maxLength={8} />
+          </div>
+          <div>
+            <label className="text-xs text-muted-foreground">Confirm new PIN</label>
+            <Input type="password" value={pinConfirm} onChange={(e) => setPinConfirm(e.target.value)} maxLength={8} />
+          </div>
+          <Button onClick={changePin}>Update PIN</Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }
+
