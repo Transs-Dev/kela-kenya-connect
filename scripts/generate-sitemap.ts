@@ -1,7 +1,7 @@
 import { writeFileSync } from "fs";
 import { resolve } from "path";
 
-const BASE_URL = "https://kela-kenya-connect.lovable.app";
+const BASE_URL = "https://kelalinkltd.lovable.app";
 
 interface SitemapEntry { path: string; changefreq?: string; priority?: string }
 
@@ -11,6 +11,7 @@ const entries: SitemapEntry[] = [
   { path: "/services", changefreq: "weekly", priority: "0.9" },
   { path: "/process", changefreq: "monthly", priority: "0.7" },
   { path: "/portfolio", changefreq: "weekly", priority: "0.8" },
+  { path: "/gallery", changefreq: "weekly", priority: "0.7" },
   { path: "/testimonials", changefreq: "weekly", priority: "0.7" },
   { path: "/faq", changefreq: "monthly", priority: "0.6" },
   { path: "/contact", changefreq: "monthly", priority: "0.8" },
