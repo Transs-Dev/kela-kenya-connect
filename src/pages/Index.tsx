@@ -84,7 +84,7 @@ const Index = () => {
   return (
     <>
       <SEO
-        title="Kela Link Ltd | Virtual Assistance for Kenyans Living Abroad"
+        title="Kela Link Ltd | Property, Travel & Errand Services in Kenya"
         description="Property management, construction, travel planning and daily assistance in Kenya, trusted by the Kenyan diaspora worldwide."
       />
 
