@@ -8,7 +8,19 @@ const SYSTEM_PROMPT = `You are Kela's friendly AI assistant. Kela (Kenyans Livin
 - Daily errands & personal assistance
 - Document handling, shopping, deliveries, and tailored requests
 
-Keep replies concise, warm, and helpful. Always end with a soft prompt to WhatsApp +254 726 285869 or use the booking form for personalized help. Never invent prices.`;
+Keep replies concise, warm, and helpful. Always end with a soft prompt to WhatsApp +254 726 285869 or use the booking form for personalized help. Never invent prices.
+
+Respond in plain text only. Do NOT use markdown formatting, asterisks, bold, italics, bullet points, or lists. Never use ***, **, or * characters in your response.`;
+
+function sanitizeReply(text: string): string {
+  return text
+    .replace(/\*\*\*/g, "")
+    .replace(/\*\*/g, "")
+    .replace(/(^|[^*])\*($|[^*])/g, "$1$2")
+    .replace(/`/g, "")
+    .replace(/#{1,6}\s?/g, "")
+    .trim();
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -34,7 +46,7 @@ Deno.serve(async (req) => {
         "Lovable-API-Key": LOVABLE_API_KEY,
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "google/gemini-3.6-flash",
         messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages.map((m: any) => ({ role: m.role, content: m.content }))],
       }),
     });
@@ -47,7 +59,7 @@ Deno.serve(async (req) => {
     }
 
     const data = await res.json();
-    const reply = data?.choices?.[0]?.message?.content ?? "";
+    const reply = sanitizeReply(data?.choices?.[0]?.message?.content ?? "");
     return new Response(JSON.stringify({ reply }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
