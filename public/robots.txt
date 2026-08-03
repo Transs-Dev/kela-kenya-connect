@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://kela-kenya-connect.lovable.app/sitemap.xml
+Sitemap: https://kelalinkltd.lovable.app/sitemap.xml

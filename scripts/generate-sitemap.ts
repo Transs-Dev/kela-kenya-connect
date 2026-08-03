@@ -1,7 +1,7 @@
 import { writeFileSync } from "fs";
 import { resolve } from "path";
 
-const BASE_URL = "https://kela-kenya-connect.lovable.app";
+const BASE_URL = "https://kelalinkltd.lovable.app";
 
 interface SitemapEntry { path: string; changefreq?: string; priority?: string }
 
